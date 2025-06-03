@@ -1,10 +1,11 @@
 import { FaGoogle, FaFacebook, FaPills } from 'react-icons/fa';
 import loginimg from '../assets/login_bg.jpg';
+import google from '../assets/google.png';
 
 const Login = () => {
     return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-8">
-            <div className="bg-white rounded-xl shadow-lg overflow-hidden w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2">
+        <div className="min-h-screen bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center px-4 py-8">
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2">
 
                 {/* Left - Image */}
                 <div className="hidden lg:block">
@@ -34,20 +35,20 @@ const Login = () => {
                         {/* Form */}
                         <form className="space-y-5">
                             <div>
-                                <label htmlFor="email" className="block text-sm text-gray-700 mb-1">
+                                <label htmlFor="email" className="block font-bold text-sm text-gray-700 mb-1">
                                     Email
                                 </label>
                                 <input
                                     type="email"
                                     id="email"
                                     required
-                                    placeholder="you@example.com"
+                                    placeholder="johndoe@gmail.com"
                                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800 placeholder-gray-400"
                                 />
                             </div>
 
                             <div>
-                                <label htmlFor="password" className="block text-sm text-gray-700 mb-1">
+                                <label htmlFor="password" className="block font-bold text-sm text-gray-700 mb-1">
                                     Password
                                 </label>
                                 <input
@@ -85,7 +86,8 @@ const Login = () => {
                         {/* Social Buttons */}
                         <div className="grid grid-cols-2 gap-4">
                             <button className="flex items-center justify-center py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
-                                <FaGoogle className="text-red-500 mr-2" />
+                                {/* <FaGoogle className="text-red-500 mr-2" /> */}
+                                <img src={google} className='w-6 h-6 mr-2' alt="Google logo" />
                                 <span className="text-sm">Google</span>
                             </button>
                             <button className="flex items-center justify-center py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
