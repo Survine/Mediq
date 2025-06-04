@@ -17,6 +17,7 @@ class UserUpdate(BaseModel):
 
 class UserInDBBase(UserBase):
     id: int
+    is_admin: bool
 
     class Config:
         orm_mode = True
