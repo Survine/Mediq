@@ -60,7 +60,6 @@ const Users = () => {
     updateItem,
     deleteItem,
     setError: setApiError,
-    setSuccess,
     clearMessages,
   } = useAdminCRUD("http://127.0.0.1:8000/users");
 
@@ -71,7 +70,6 @@ const Users = () => {
     setSearchType,
     filteredData: filteredUsers = [], // Default to empty array
     searchError,
-    setSearchError,
   } = useAdminSearch(users, searchOptions);
 
   const [editingUser, setEditingUser] = useState(null);
