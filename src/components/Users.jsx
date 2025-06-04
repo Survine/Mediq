@@ -158,7 +158,9 @@ const Users = () => {
                 throw new Error(errorData.detail || "Delete failed");
             }
             setSuccess("User deleted successfully");
-            fetchUsers();
+            // Clear search to show all users after deletion
+            setSearchTerm("");
+            await fetchUsers();
         } catch (error) {
             console.error("Error deleting user:", error);
             setError(error.message);
@@ -194,6 +196,8 @@ const Users = () => {
                     is_admin: formData.is_admin
                 };
 
+            console.log("Sending request:", { url, method, data: requestData });
+
             const response = await fetch(url, {
                 method,
                 headers: { "Content-Type": "application/json" },
@@ -206,11 +210,25 @@ const Users = () => {
             }
 
             const result = await response.json();
+            console.log("Save response:", result);
+            
+            // Close modal first
             setEditingUser(null);
             setIsCreating(false);
             setFormData({ username: "", email: "", password: "", is_admin: false });
+            
+            // Set success message
             setSuccess(editingUser ? "User updated successfully" : "User created successfully");
-            fetchUsers();
+            
+            // Clear search to show all users
+            setSearchTerm("");
+            
+            // Refresh users list
+            await fetchUsers();
+            
+            // Clear success message after 3 seconds
+            setTimeout(() => setSuccess(null), 3000);
+            
         } catch (error) {
             console.error("Error saving user:", error);
             setError(error.message);
