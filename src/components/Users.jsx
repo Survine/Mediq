@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import AdminLayout from "../constants/AdminLayout";
+import Layout from "../constants/Layout";
 import AdminHeader from "../constants/AdminHeader";
 import AdminToolbar from "../constants/AdminToolbar";
 import AdminTable from "../constants/AdminTable";
