@@ -1,6 +1,6 @@
 import { FaPencil, FaTrash } from "react-icons/fa6";
 
-const AdminTable = ({ 
+const Table = ({ 
   columns, 
   data, 
   emptyMessage, 
@@ -73,4 +73,4 @@ const AdminTable = ({
   );
 };
 
-export default AdminTable;
+export default Table;

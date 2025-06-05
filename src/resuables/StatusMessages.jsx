@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaTimes } from "react-icons/fa";
 
-const AdminStatusMessages = ({ 
+const StatusMessages = ({ 
   error: initialError, 
   success: initialSuccess, 
   isLoading,
@@ -70,4 +70,4 @@ const AdminStatusMessages = ({
     </>
   );
 };
-export default AdminStatusMessages;
+export default StatusMessages;

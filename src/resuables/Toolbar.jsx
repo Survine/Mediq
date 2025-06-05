@@ -1,7 +1,7 @@
 import { FaPlus } from "react-icons/fa6";
-import  AdminSearchBar  from "./AdminSearchBar";
+import  SearchBar  from "./SearchBar";
 
-const AdminToolbar = ({ 
+const Toolbar = ({ 
   onAddClick, 
   searchTerm, 
   setSearchTerm, 
@@ -22,7 +22,7 @@ const AdminToolbar = ({
         </button>
       </div>
 
-      <AdminSearchBar
+      <SearchBar
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         searchType={searchType}
@@ -33,4 +33,4 @@ const AdminToolbar = ({
     </div>
   );
 };
-export default AdminToolbar;
+export default Toolbar;

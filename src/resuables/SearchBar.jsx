@@ -1,6 +1,6 @@
 import { FaSearch, FaTimes } from "react-icons/fa";
 
-const AdminSearchBar = ({
+const SearchBar = ({
     searchTerm,
     setSearchTerm,
     searchType,
@@ -49,4 +49,4 @@ const AdminSearchBar = ({
         </div>
     );
 };
-export default AdminSearchBar;
+export default SearchBar;

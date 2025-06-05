@@ -1,14 +1,14 @@
 import { useState } from "react";
 
-import Layout from "../constants/Layout";
-import AdminHeader from "../constants/AdminHeader";
-import AdminToolbar from "../constants/AdminToolbar";
-import AdminTable from "../constants/AdminTable";
-import AdminModalForm from "../constants/AdminModalForm";
-import AdminStatusMessages from "../constants/AdminStatusMessages";
+import Layout from "../resuables/Layout";
+import Header from "../resuables/Header";
+import Toolbar from "../resuables/Toolbar";
+import Table from "../resuables/Table";
+import ModalForm from "../resuables/ModalForm";
+import StatusMessages from "../resuables/StatusMessages";
 
-import useAdminCRUD from "../constants/useAdminCRUD";
-import useAdminSearch from "../constants/useAdminSearch";
+import useAdminCRUD from "../hooks/useAdminCRUD";
+import useAdminSearch from "../hooks/useAdminSearch";
 
 
 const Users = () => {
@@ -140,9 +140,9 @@ const Users = () => {
 
   return (
     <Layout>
-      <AdminHeader title="👥 Users Dashboard" description="Manage your application users" />
+      <Header title="👥 Users Dashboard" description="Manage your application users" />
       
-      <AdminToolbar
+      <Toolbar
         onAddClick={handleCreateClick}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -152,9 +152,9 @@ const Users = () => {
         isLoading={isLoading}
       />
 
-      <AdminStatusMessages error={error} success={success} isLoading={isLoading} />
+      <StatusMessages error={error} success={success} isLoading={isLoading} />
 
-      <AdminTable
+      <Table
         columns={tableColumns}
         data={filteredUsers}
         emptyMessage={searchTerm ? "No users found matching your search" : "No users available"}
@@ -163,7 +163,7 @@ const Users = () => {
         isLoading={isLoading}
       />
 
-      <AdminModalForm
+      <ModalForm
         isOpen={!!editingUser || isCreating}
         onClose={() => {
           setEditingUser(null);

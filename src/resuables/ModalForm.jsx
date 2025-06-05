@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { FaUser, FaEnvelope, FaLock, FaUserShield } from "react-icons/fa6";
 import { FaTimes } from "react-icons/fa";
 
-const AdminModalForm = ({
+const ModalForm = ({
   isOpen,
   onClose,
   onSubmit,
@@ -131,4 +131,4 @@ const AdminModalForm = ({
     </div>
   );
 };
-export default AdminModalForm;
+export default ModalForm;
