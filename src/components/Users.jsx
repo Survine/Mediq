@@ -139,7 +139,7 @@ const Users = () => {
   const error = apiError || searchError;
 
   return (
-    <AdminLayout>
+    <Layout>
       <AdminHeader title="👥 Users Dashboard" description="Manage your application users" />
       
       <AdminToolbar
@@ -178,7 +178,7 @@ const Users = () => {
         isLoading={isLoading}
         error={error}
       />
-    </AdminLayout>
+    </Layout>
   );
 };
 

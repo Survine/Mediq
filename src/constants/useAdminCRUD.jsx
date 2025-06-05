@@ -91,16 +91,23 @@ const useAdminCRUD = (endpoint) => {
         method: 'DELETE',
       });
 
+      if (response.status === 204 || response.status === 200) {
+        setData(prev => prev.filter(item => item.id !== id));
+        setSuccess("Item deleted successfully");
+        return true;
+      }
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.detail || "Delete failed");
       }
 
-      setSuccess("Item deleted successfully");
+      const result = await response.json();
+      setData(prev => prev.filter(item => item.id !== result.id));
       return true;
     } catch (err) {
       setError(err.message);
-      throw err;
+      return false;
     } finally {
       setIsLoading(false);
     }
