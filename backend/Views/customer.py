@@ -18,11 +18,6 @@ def fetch_customer_by_id(db: Session, customer_id: int) -> Customer:
 def fetch_customer_by_email(db: Session, email: str) -> Optional[Customer]:
     return db.query(Customer).filter(Customer.email == email).first()
 
-def fetch_customer_with_orders(db: Session, customer_id: int) -> Customer:
-    customer = db.query(Customer).options(joinedload(Customer.orders)).filter(Customer.id == customer_id).first()
-    if not customer:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Customer not found")
-    return customer
 
 def create_customer(db: Session, customer_in: CustomerCreate) -> Customer:
     # Check if a customer with this email already exists

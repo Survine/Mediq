@@ -1,15 +1,14 @@
 import { useRef } from "react";
-import { FaUser, FaEnvelope, FaLock, FaUserShield } from "react-icons/fa6";
+import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 
-const ModalForm = ({
+const CustomerModalForm = ({
   isOpen,
   onClose,
   onSubmit,
   title,
   formData,
   setFormData,
-  isCreating,
   isLoading,
   error
 }) => {
@@ -30,9 +29,7 @@ const ModalForm = ({
       className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/30 z-50 p-4 overflow-auto"
     >
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-md border border-gray-200 my-8">
-        {/* Add my-8 for vertical margin */}
         <div className="p-4 flex justify-end sticky top-0 bg-white z-10">
-          {/* Make close button sticky */}
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600"
@@ -42,7 +39,6 @@ const ModalForm = ({
           </button>
         </div>
         <div className="p-6 overflow-y-auto max-h-[calc(100vh-200px)]">
-          {/* Add scrollable area with max height */}
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">{title}</h2>
 
           {error && (
@@ -55,14 +51,15 @@ const ModalForm = ({
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 <FaUser className="inline mr-2" />
-                Username
+                Customer Name
               </label>
               <input
                 type="text"
-                value={formData.username}
-                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 disabled={isLoading}
+                required
               />
             </div>
 
@@ -82,31 +79,31 @@ const ModalForm = ({
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                <FaLock className="inline mr-2" />
-                {isCreating ? "Password" : "Change Password (leave blank to keep)"}
+                <FaPhone className="inline mr-2" />
+                Phone Number
               </label>
               <input
-                type="password"
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                type="tel"
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 disabled={isLoading}
-                placeholder={isCreating ? "" : "•••••••• (leave blank to preserve existing)"}
+                required
               />
             </div>
 
             <div>
-              <label className="flex items-center space-x-2">
-                <FaUserShield />
-                <span className="text-sm font-medium text-gray-700">Administrator</span>
-                <input
-                  type="checkbox"
-                  checked={formData.is_admin}
-                  onChange={(e) => setFormData({ ...formData, is_admin: e.target.checked })}
-                  className="h-4 w-4 rounded border-gray-300 focus:ring-indigo-400"
-                  disabled={isLoading}
-                />
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                <FaMapMarkerAlt className="inline mr-2" />
+                Address
               </label>
+              <textarea
+                value={formData.address}
+                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                disabled={isLoading}
+                rows={3}
+              />
             </div>
           </div>
 
@@ -131,4 +128,5 @@ const ModalForm = ({
     </div>
   );
 };
-export default ModalForm;
+
+export default CustomerModalForm;

@@ -4,7 +4,7 @@ import Layout from "../resuables/Layout";
 import Header from "../resuables/Header";
 import Toolbar from "../resuables/Toolbar";
 import Table from "../resuables/Table";
-import ModalForm from "../resuables/ModalForm";
+import UserModalForm from "../inputforms/UserModalForm";
 import StatusMessages from "../resuables/StatusMessages";
 
 import useAdminCRUD from "../hooks/useAdminCRUD";
@@ -163,7 +163,7 @@ const Users = () => {
         isLoading={isLoading}
       />
 
-      <ModalForm
+      <UserModalForm
         isOpen={!!editingUser || isCreating}
         onClose={() => {
           setEditingUser(null);
