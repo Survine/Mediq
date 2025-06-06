@@ -8,7 +8,8 @@ const Toolbar = ({
   searchType, 
   setSearchType, 
   searchOptions, 
-  isLoading 
+  isLoading,
+  addButtonText = "Add Item"
 }) => {
   return (
     <div className="p-4 flex flex-wrap items-center justify-between gap-4 bg-white/20">
@@ -18,7 +19,7 @@ const Toolbar = ({
           className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 flex items-center gap-2 shadow-md hover:shadow-lg transition-all"
           disabled={isLoading}
         >
-          <FaPlus /> Add User
+          <FaPlus /> {addButtonText}
         </button>
       </div>
 

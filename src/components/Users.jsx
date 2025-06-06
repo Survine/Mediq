@@ -150,6 +150,7 @@ const Users = () => {
         setSearchType={setSearchType}
         searchOptions={searchOptions}
         isLoading={isLoading}
+        addButtonText="Add User"
       />
 
       <StatusMessages error={error} success={success} isLoading={isLoading} />

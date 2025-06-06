@@ -151,6 +151,7 @@ const Customers = () => {
                 setSearchType={setSearchType}
                 searchOptions={searchOptions}
                 isLoading={isLoading}
+                addButtonText="Add Customer"
             />
 
             <StatusMessages error={error} success={success} isLoading={isLoading} />
