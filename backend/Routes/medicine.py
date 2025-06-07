@@ -22,7 +22,7 @@ def get_all_medicines(db: Session = Depends(get_db)):
 #Gives medicine by id
 @router.get("/{medicine_id}", response_model=MedicineOut)
 def get_medicine_by_id(medicine_id: int, db: Session = Depends(get_db)):
-    med = db.query(Medicine).filter(Medicine.id == medicine_id).first()
+    med = fetch_medicine_by_id(db, medicine_id)
     if not med:
         raise HTTPException(status_code=404, detail="Medicine not found")
     return med
@@ -30,7 +30,10 @@ def get_medicine_by_id(medicine_id: int, db: Session = Depends(get_db)):
 #Gives medicine by name
 @router.get("/name/{medicine_name}", response_model=MedicineOut)
 def get_medicine_by_name(medicine_name: str, db: Session = Depends(get_db)):
-    return fetch_medicine_by_name(db, medicine_name)
+    med = fetch_medicine_by_name(db, medicine_name)
+    if not med:
+        raise HTTPException(status_code=404, detail="Medicine not found")
+    return med
 
 #Creates a new medicine
 @router.post("/", response_model=MedicineOut)

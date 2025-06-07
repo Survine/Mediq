@@ -1,4 +1,4 @@
-import { useState, useCallback,useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 
 const useAdminCRUD = (endpoint) => {
   const [data, setData] = useState([]);
@@ -9,6 +9,7 @@ const useAdminCRUD = (endpoint) => {
   const fetchAll = useCallback(async () => {
     setIsLoading(true);
     setError(null);
+    setSuccess(null);
     try {
       const response = await fetch(endpoint);
       if (!response.ok) {
@@ -26,7 +27,6 @@ const useAdminCRUD = (endpoint) => {
     }
   }, [endpoint]);
 
-    // Add useEffect to fetch data on mount
   useEffect(() => {
     fetchAll();
   }, [fetchAll]);
@@ -34,6 +34,7 @@ const useAdminCRUD = (endpoint) => {
   const createItem = useCallback(async (itemData) => {
     setIsLoading(true);
     setError(null);
+    setSuccess(null);
     try {
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -60,6 +61,7 @@ const useAdminCRUD = (endpoint) => {
   const updateItem = useCallback(async (id, itemData) => {
     setIsLoading(true);
     setError(null);
+    setSuccess(null);
     try {
       const response = await fetch(`${endpoint}/${id}`, {
         method: 'PUT',
@@ -86,6 +88,7 @@ const useAdminCRUD = (endpoint) => {
   const deleteItem = useCallback(async (id) => {
     setIsLoading(true);
     setError(null);
+    setSuccess(null);
     try {
       const response = await fetch(`${endpoint}/${id}`, {
         method: 'DELETE',
@@ -102,9 +105,7 @@ const useAdminCRUD = (endpoint) => {
         throw new Error(errorData.detail || "Delete failed");
       }
 
-      const result = await response.json();
-      setData(prev => prev.filter(item => item.id !== result.id));
-      return true;
+      return false;
     } catch (err) {
       setError(err.message);
       return false;
@@ -132,4 +133,5 @@ const useAdminCRUD = (endpoint) => {
     clearMessages,
   };
 };
+
 export default useAdminCRUD;

@@ -50,13 +50,9 @@ def update_existing_medicine(db: Session, medicine_id: int, medicine_data: Medic
 
 def delete_medicine_by_id(db: Session, medicine_id: int) -> Medicine:
     medicine_to_delete = fetch_medicine_by_id(db, medicine_id)
-
     if not medicine_to_delete:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Medicine not found",
-        )
-
+        raise HTTPException(status_code=404, detail="Medicine not found")
     db.delete(medicine_to_delete)
     db.commit()
-    return {"detail": "Medicine deleted successfully"}
+    return medicine_to_delete
+
