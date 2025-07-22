@@ -6,9 +6,9 @@ import Users from "./components/Users"
 const App = () => {
   return (
     <div>
-      {/* <Login /> */}
-      {/* <Users /> */}
-      {/* <Customers /> */}
+      <Login />
+      <Users />
+      <Customers />
       <Medicines />
     </div>
   )
