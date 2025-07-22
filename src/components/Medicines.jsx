@@ -46,7 +46,7 @@ const Medicines = () => {
     deleteItem,
     setError: setApiError,
     clearMessages,
-  } = useAdminCRUD("http://127.0.0.1:8000/medicines");
+  } = useAdminCRUD("https://mediq-a6x0.onrender.com/medicines");
 
   const {
     searchTerm,

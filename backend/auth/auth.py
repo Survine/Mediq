@@ -29,7 +29,7 @@ oauth.register(
     access_token_params=None,
     refresh_token_url=None,
     authorize_state=config("SECRET_KEY"),
-    redirect_uri="http://127.0.0.1:8000/auth",
+    redirect_uri="https://mediq-a6x0.onrender.com/auth",
     jwks_uri="https://www.googleapis.com/oauth2/v3/certs",
     client_kwargs={"scope": "openid profile email"},                          
 )
