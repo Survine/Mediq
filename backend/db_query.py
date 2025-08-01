@@ -5,7 +5,7 @@ from databases.database import engine, Base
 # from models.order import Order, OrderMedicine
 
 def delete_database():
-    db_path = "medicines.db"
+    db_path = r"D:\Mediq\backend\medicines.db"
     if os.path.exists(db_path):
         os.remove(db_path)
         print(f"Database '{db_path}' has been deleted.")
