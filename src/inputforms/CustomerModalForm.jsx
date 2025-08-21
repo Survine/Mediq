@@ -1,8 +1,9 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 
 const CustomerModalForm = ({
+  // Old pattern props
   isOpen,
   onClose,
   onSubmit,
@@ -10,9 +11,36 @@ const CustomerModalForm = ({
   formData,
   setFormData,
   isLoading,
-  error
+  error,
+  // New pattern props
+  customer
 }) => {
   const modalOverlayRef = useRef(null);
+  const [localFormData, setLocalFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    address: ''
+  });
+
+  // Handle new pattern
+  useEffect(() => {
+    if (customer) {
+      setLocalFormData({
+        name: customer.name || '',
+        email: customer.email || '',
+        phone: customer.phone || '',
+        address: customer.address || ''
+      });
+    } else if (!formData) {
+      setLocalFormData({
+        name: '',
+        email: '',
+        phone: '',
+        address: ''
+      });
+    }
+  }, [customer, formData]);
 
   const handleOverlayClick = (e) => {
     if (e.target === modalOverlayRef.current) {
@@ -20,7 +48,24 @@ const CustomerModalForm = ({
     }
   };
 
-  if (!isOpen) return null;
+  const handleSubmit = () => {
+    // Use local form data for new pattern, fallback to old pattern
+    const dataToSubmit = formData || localFormData;
+    
+    if (!dataToSubmit.name.trim() || !dataToSubmit.email.trim() || !dataToSubmit.phone.trim()) {
+      return;
+    }
+
+    onSubmit(dataToSubmit);
+  };
+
+  // Support both isOpen (old pattern) and always show (new pattern)
+  const shouldShow = isOpen !== undefined ? isOpen : true;
+  
+  if (!shouldShow) return null;
+
+  const currentFormData = formData || localFormData;
+  const currentSetFormData = setFormData || setLocalFormData;
 
   return (
     <div
@@ -39,7 +84,9 @@ const CustomerModalForm = ({
           </button>
         </div>
         <div className="p-6 overflow-y-auto max-h-[calc(100vh-200px)]">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">{title}</h2>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            {title || (customer ? 'Edit Customer' : 'Add Customer')}
+          </h2>
 
           {error && (
             <div className="mb-4 p-2 bg-red-100 border-l-4 border-red-500 text-red-700 rounded">
@@ -51,13 +98,13 @@ const CustomerModalForm = ({
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 <FaUser className="inline mr-2" />
-                Customer Name
+                Customer Name *
               </label>
               <input
                 type="text"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                value={currentFormData.name}
+                onChange={(e) => currentSetFormData({ ...currentFormData, name: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 disabled={isLoading}
                 required
               />
@@ -66,27 +113,28 @@ const CustomerModalForm = ({
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 <FaEnvelope className="inline mr-2" />
-                Email
+                Email *
               </label>
               <input
                 type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                value={currentFormData.email}
+                onChange={(e) => currentSetFormData({ ...currentFormData, email: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 disabled={isLoading}
+                required
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 <FaPhone className="inline mr-2" />
-                Phone Number
+                Phone Number *
               </label>
               <input
                 type="tel"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                value={currentFormData.phone}
+                onChange={(e) => currentSetFormData({ ...currentFormData, phone: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 disabled={isLoading}
                 required
               />
@@ -95,14 +143,15 @@ const CustomerModalForm = ({
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 <FaMapMarkerAlt className="inline mr-2" />
-                Address
+                Address *
               </label>
               <textarea
-                value={formData.address}
-                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                value={currentFormData.address}
+                onChange={(e) => currentSetFormData({ ...currentFormData, address: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 disabled={isLoading}
                 rows={3}
+                required
               />
             </div>
           </div>
@@ -116,11 +165,11 @@ const CustomerModalForm = ({
               Cancel
             </button>
             <button
-              onClick={onSubmit}
-              className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 shadow-md hover:shadow-lg transition-all"
-              disabled={isLoading}
+              onClick={handleSubmit}
+              className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white transition-colors disabled:opacity-50"
+              disabled={isLoading || !currentFormData.name.trim() || !currentFormData.email.trim() || !currentFormData.phone.trim()}
             >
-              {isLoading ? "Saving..." : "Save"}
+              {isLoading ? "Saving..." : customer ? "Update" : "Create"}
             </button>
           </div>
         </div>
