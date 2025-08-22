@@ -155,6 +155,27 @@ class ApiService {
     return this.request(`/invoices/${id}`);
   }
 
+  static async getInvoiceDetails(id) {
+    return this.request(`/invoices/${id}/details`);
+  }
+
+  static async getInvoicePrintData(id) {
+    return this.request(`/invoices/${id}/print-data`);
+  }
+
+  static async getInvoiceHTML(id) {
+    const url = `${API_BASE_URL}/invoices/${id}/print`;
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.text();
+  }
+
+  static async getOverdueInvoices() {
+    return this.request('/invoices/overdue');
+  }
+
   static async createInvoice(invoice) {
     return this.request('/invoices', {
       method: 'POST',
@@ -166,6 +187,12 @@ class ApiService {
     return this.request(`/invoices/${id}`, {
       method: 'PUT',
       body: JSON.stringify(invoice),
+    });
+  }
+
+  static async markInvoiceAsPaid(id) {
+    return this.request(`/invoices/${id}/mark-paid`, {
+      method: 'POST',
     });
   }
 

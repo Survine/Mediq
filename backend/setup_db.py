@@ -218,17 +218,35 @@ def populate_orders_and_invoices(db):
         
         # Create invoice for completed orders
         if order.status == OrderStatus.COMPLETED:
+            from Models.invoice import InvoiceStatus
+            import uuid
+            
             tax = total_amount * 0.18  # 18% GST
-            total_with_tax = total_amount + tax
+            discount = 0  # No discount for dummy data
+            total_with_tax = total_amount - discount + tax
+            
+            # Generate invoice number
+            invoice_number = f"INV-{datetime.now().year}-{uuid.uuid4().hex[:8].upper()}"
+            
+            # Set due date (30 days from order date)
+            due_date = order_date + timedelta(days=30)
             
             invoice = Invoice(
-                invoice_number=f"INV-{order.id:04d}-{datetime.now().year}",
+                invoice_number=invoice_number,
                 order_id=order.id,
                 user_id=random.choice(users).id,
                 amount=total_amount,
                 tax=tax,
+                discount=discount,
                 total_amount=total_with_tax,
-                created_at=order_date + timedelta(hours=1)
+                status=InvoiceStatus.PAID if random.random() > 0.3 else InvoiceStatus.SENT,  # 70% paid
+                notes=f"Invoice for order #{order.id}",
+                terms="Payment due within 30 days of invoice date.",
+                due_date=due_date,
+                issued_date=order_date + timedelta(hours=1),
+                paid_date=order_date + timedelta(days=random.randint(1, 25)) if random.random() > 0.3 else None,
+                created_at=order_date + timedelta(hours=1),
+                updated_at=order_date + timedelta(hours=1)
             )
             db.add(invoice)
     
