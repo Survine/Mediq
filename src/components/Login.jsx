@@ -1,6 +1,6 @@
-import { FaGoogle, FaFacebook, FaPills } from 'react-icons/fa';
+import { FaPills } from 'react-icons/fa';
+import { SignIn } from '@clerk/clerk-react';
 import loginimg from '../assets/login_bg.jpg';
-import google from '../assets/google.png';
 
 const Login = () => {
     return (
@@ -32,77 +32,27 @@ const Login = () => {
                             </p>
                         </div>
 
-                        {/* Form */}
-                        <form className="space-y-5">
-                            <div>
-                                <label htmlFor="email" className="block font-bold text-sm text-gray-700 mb-1">
-                                    Email
-                                </label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    required
-                                    placeholder="johndoe@gmail.com"
-                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800 placeholder-gray-400"
-                                />
-                            </div>
-
-                            <div>
-                                <label htmlFor="password" className="block font-bold text-sm text-gray-700 mb-1">
-                                    Password
-                                </label>
-                                <input
-                                    type="password"
-                                    id="password"
-                                    required
-                                    placeholder="••••••••"
-                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800 placeholder-gray-400"
-                                />
-                            </div>
-
-                            <div className="flex items-center justify-between text-sm">
-                                <label className="flex items-center">
-                                    <input type="checkbox" className="mr-2 rounded border-gray-300 text-indigo-600" />
-                                    Remember me
-                                </label>
-                                <a href="#" className="text-indigo-600 hover:underline">Forgot password?</a>
-                            </div>
-
-                            <button
-                                type="submit"
-                                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-medium transition duration-200"
-                            >
-                                Sign in
-                            </button>
-                        </form>
-
-                        {/* OR divider */}
-                        <div className="flex items-center my-6">
-                            <div className="flex-grow border-t border-gray-200" />
-                            <span className="mx-4 text-gray-400 text-sm">or continue with</span>
-                            <div className="flex-grow border-t border-gray-200" />
+                        {/* Clerk Sign In Component */}
+                        <div className="flex justify-center">
+                            <SignIn 
+                                appearance={{
+                                    elements: {
+                                        formButtonPrimary: 
+                                            'bg-indigo-600 hover:bg-indigo-700 text-sm normal-case',
+                                        card: 'shadow-none border-0 bg-transparent',
+                                        headerTitle: 'hidden',
+                                        headerSubtitle: 'hidden',
+                                        socialButtonsBlockButton: 
+                                            'border border-gray-300 hover:bg-gray-50',
+                                        formFieldInput: 
+                                            'px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500',
+                                        footerActionLink: 'text-indigo-600 hover:text-indigo-700',
+                                    },
+                                }}
+                                redirectUrl="/"
+                                signUpUrl="/sign-up"
+                            />
                         </div>
-
-                        {/* Social Buttons */}
-                        <div className="grid grid-cols-2 gap-4">
-                            <button className="flex items-center justify-center py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
-                                {/* <FaGoogle className="text-red-500 mr-2" /> */}
-                                <img src={google} className='w-6 h-6 mr-2' alt="Google logo" />
-                                <span className="text-sm">Google</span>
-                            </button>
-                            <button className="flex items-center justify-center py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
-                                <FaFacebook className="text-blue-600 mr-2" />
-                                <span className="text-sm">Facebook</span>
-                            </button>
-                        </div>
-
-                        {/* Sign up */}
-                        <p className="mt-6 text-center text-sm text-gray-600">
-                            Don’t have an account?{' '}
-                            <a href="#" className="text-indigo-600 hover:underline font-medium">
-                                Sign up
-                            </a>
-                        </p>
                     </div>
                 </div>
             </div>

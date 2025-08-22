@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { SignedIn, SignedOut } from '@clerk/clerk-react';
 import Layout from './resuables/Layout';
 import Login from './components/Login';
+import SignUp from './components/SignUp';
 import Dashboard from './components/Dashboard';
 import Medicines from './components/Medicines';
 import Customers from './components/Customers';
@@ -14,7 +15,10 @@ const App = () => {
   return (
     <Router>
       <SignedOut>
-        <Login />
+        <Routes>
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="*" element={<Login />} />
+        </Routes>
       </SignedOut>
       <SignedIn>
         <Layout>
