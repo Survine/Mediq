@@ -13,9 +13,7 @@ async def scalar_html():
         openapi_url=app.openapi_url,
         title=app.title,
     )
-origins = [
-    "http://localhost:5173", "http://localhost:3000", "http://localhost:8000"
-]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,

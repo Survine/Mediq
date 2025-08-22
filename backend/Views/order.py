@@ -9,7 +9,16 @@ from Models.stock import Stock
 from Schemas.order import OrderCreate, OrderUpdate
 
 def fetch_all_orders(db: Session) -> List[Order]:
-    return db.query(Order).options(joinedload(Order.order_medicines)).all()
+    try:
+        return db.query(Order).options(
+            joinedload(Order.customer),
+            joinedload(Order.order_medicines).joinedload(OrderMedicine.medicine),
+            joinedload(Order.invoice)
+        ).all()
+    except Exception as e:
+        # If joinedload fails, try without it
+        print(f"Error in fetch_all_orders: {str(e)}")
+        return db.query(Order).all()
 
 def fetch_order_by_id(db: Session, order_id: int) -> Optional[Order]:
     return db.query(Order).filter(Order.id == order_id).first()
@@ -114,6 +123,8 @@ def delete_order(db: Session, order_id: int) -> Order:
             stock.quantity += order_med.quantity
             db.add(stock)
     
+    # Store the order before deletion
+    deleted_order = db_order
     db.delete(db_order)
     db.commit()
-    return {"details": "Order deleted successfully"}
+    return deleted_order

@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Optional, Any, List
+from datetime import datetime
 
 class OrderMedicineBase(BaseModel):
     medicine_id: int
@@ -36,6 +37,7 @@ class OrderInDBBase(OrderBase):
     id: int
     total_amount: float
     status: str
+    order_date: Optional[datetime] = None
 
     class Config:
         from_attributes = True
