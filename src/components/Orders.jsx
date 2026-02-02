@@ -108,8 +108,8 @@ const Orders = () => {
     },
     {
       key: 'customer_id',
-      header: 'Customer ID',
-      render: (value) => <span className="font-medium">{value}</span>
+      header: 'Customer',
+      render: (value, order) => <span className="font-medium">{order.customer?.name || value}</span>
     },
     {
       key: 'total_amount',

@@ -16,8 +16,12 @@ const OrderModalForm = ({ order, onSubmit, onClose }) => {
     fetchCustomersAndMedicines();
     if (order) {
       setFormData({
-        customer_id: order.customer_id,
-        order_medicines: order.order_medicines || []
+        customer_id: order.customer_id ? String(order.customer_id) : '',
+        order_medicines: (order.order_medicines || []).map(item => ({
+          medicine_id: item.medicine_id ? String(item.medicine_id) : '',
+          quantity: item.quantity,
+          unit_price: item.unit_price
+        }))
       });
     }
   }, [order]);
@@ -147,7 +151,7 @@ const OrderModalForm = ({ order, onSubmit, onClose }) => {
             >
               <option value="">Select a customer</option>
               {customers.map((customer) => (
-                <option key={customer.id} value={customer.id}>
+                <option key={customer.id} value={String(customer.id)}>
                   {customer.name} - {customer.email}
                 </option>
               ))}
@@ -187,7 +191,7 @@ const OrderModalForm = ({ order, onSubmit, onClose }) => {
                       >
                         <option value="">Select medicine</option>
                         {medicines.map((medicine) => (
-                          <option key={medicine.id} value={medicine.id}>
+                          <option key={medicine.id} value={String(medicine.id)}>
                             {medicine.name} - ${medicine.price}
                           </option>
                         ))}
