@@ -19,9 +19,9 @@ const Inventory = () => {
     fetchStocksAndMedicines();
   }, []);
 
-  const fetchStocksAndMedicines = async () => {
+  const fetchStocksAndMedicines = async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) setLoading(true);
       const [stocksData, medicinesData] = await Promise.all([
         ApiService.getStocks(),
         ApiService.getMedicines()
@@ -73,7 +73,7 @@ const Inventory = () => {
       try {
         await ApiService.deleteStock(stock.id);
         setMessage({ type: 'success', text: 'Stock deleted successfully' });
-        fetchStocksAndMedicines();
+        fetchStocksAndMedicines(false);
       } catch (error) {
         setMessage({ type: 'error', text: 'Failed to delete stock' });
       }
@@ -90,7 +90,7 @@ const Inventory = () => {
         setMessage({ type: 'success', text: 'Stock created successfully' });
       }
       setShowModal(false);
-      fetchStocksAndMedicines();
+      fetchStocksAndMedicines(false);
     } catch (error) {
       setMessage({ type: 'error', text: error.message });
     }

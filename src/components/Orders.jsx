@@ -18,9 +18,9 @@ const Orders = () => {
     fetchOrders();
   }, []);
 
-  const fetchOrders = async () => {
+  const fetchOrders = async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) setLoading(true);
       const data = await ApiService.getOrders();
       setOrders(data);
       setFilteredOrders(data);
@@ -64,7 +64,7 @@ const Orders = () => {
       try {
         await ApiService.deleteOrder(order.id);
         setMessage({ type: 'success', text: 'Order deleted successfully' });
-        fetchOrders();
+        fetchOrders(false);
       } catch (error) {
         setMessage({ type: 'error', text: 'Failed to delete order' });
       }
@@ -81,7 +81,7 @@ const Orders = () => {
         setMessage({ type: 'success', text: 'Order created successfully' });
       }
       setShowModal(false);
-      fetchOrders();
+      fetchOrders(false);
     } catch (error) {
       setMessage({ type: 'error', text: error.message });
     }

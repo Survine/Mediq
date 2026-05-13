@@ -47,14 +47,16 @@ const MedicineModalForm = ({
     // Use local form data for new pattern, fallback to old pattern
     const dataToSubmit = formData || localFormData;
     
-    if (!dataToSubmit.name.trim() || !dataToSubmit.price.trim()) {
+    // Convert price to string for validation, then check if valid
+    const priceStr = String(dataToSubmit.price).trim();
+    if (!dataToSubmit.name.trim() || !priceStr || parseFloat(priceStr) <= 0) {
       return;
     }
 
     // Convert price to number
     const submitData = {
       ...dataToSubmit,
-      price: parseFloat(dataToSubmit.price)
+      price: parseFloat(priceStr)
     };
 
     onSubmit(submitData);
@@ -143,7 +145,7 @@ const MedicineModalForm = ({
             <button
               type="submit"
               className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors disabled:opacity-50"
-              disabled={isLoading || !currentFormData.name.trim() || !currentFormData.price.trim()}
+              disabled={isLoading || !currentFormData.name.trim() || !String(currentFormData.price).trim()}
             >
               {isLoading ? "Saving..." : medicine ? "Update" : "Create"}
             </button>

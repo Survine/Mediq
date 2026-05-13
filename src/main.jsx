@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
+import ErrorBoundary from './components/ErrorBoundary.jsx'
 
 // Import your Clerk provider
 import { ClerkProvider } from '@clerk/clerk-react'
@@ -16,7 +17,9 @@ if (!PUBLISHABLE_KEY) {
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-      <App />
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
     </ClerkProvider>
   </React.StrictMode>
 )

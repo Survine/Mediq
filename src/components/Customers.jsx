@@ -18,9 +18,9 @@ const Customers = () => {
     fetchCustomers();
   }, []);
 
-  const fetchCustomers = async () => {
+  const fetchCustomers = async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) setLoading(true);
       const data = await ApiService.getCustomers();
       setCustomers(data);
       setFilteredCustomers(data);
@@ -64,7 +64,7 @@ const Customers = () => {
       try {
         await ApiService.deleteCustomer(customer.id);
         setMessage({ type: 'success', text: 'Customer deleted successfully' });
-        fetchCustomers();
+        fetchCustomers(false);
       } catch (error) {
         setMessage({ type: 'error', text: 'Failed to delete customer' });
       }
@@ -81,7 +81,7 @@ const Customers = () => {
         setMessage({ type: 'success', text: 'Customer created successfully' });
       }
       setShowModal(false);
-      fetchCustomers();
+      fetchCustomers(false);
     } catch (error) {
       setMessage({ type: 'error', text: error.message });
     }

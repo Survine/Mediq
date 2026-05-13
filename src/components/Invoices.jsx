@@ -21,9 +21,9 @@ const Invoices = () => {
     fetchOrders();
   }, []);
 
-  const fetchInvoices = async () => {
+  const fetchInvoices = async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) setLoading(true);
       const data = await ApiService.getInvoices();
       setInvoices(data);
       applyFilters(data);
@@ -101,7 +101,7 @@ const Invoices = () => {
         await ApiService.createInvoice(invoiceData);
         setMessage({ type: 'success', text: 'Invoice created successfully' });
       }
-      await fetchInvoices();
+      await fetchInvoices(false);
       setShowModal(false);
       setEditingInvoice(null);
     } catch (error) {
@@ -141,7 +141,7 @@ const Invoices = () => {
       try {
         await ApiService.markInvoiceAsPaid(invoice.id);
         setMessage({ type: 'success', text: 'Invoice marked as paid' });
-        await fetchInvoices();
+        await fetchInvoices(false);
       } catch (error) {
         setMessage({ type: 'error', text: 'Failed to mark invoice as paid' });
       }
@@ -158,7 +158,7 @@ const Invoices = () => {
       try {
         await ApiService.deleteInvoice(invoice.id);
         setMessage({ type: 'success', text: 'Invoice deleted successfully' });
-        await fetchInvoices();
+        await fetchInvoices(false);
       } catch (error) {
         setMessage({ type: 'error', text: error.message || 'Failed to delete invoice' });
       }

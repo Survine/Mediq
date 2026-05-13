@@ -18,9 +18,9 @@ const Medicines = () => {
     fetchMedicines();
   }, []);
 
-  const fetchMedicines = async () => {
+  const fetchMedicines = async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) setLoading(true);
       const data = await ApiService.getMedicines();
       setMedicines(data);
       setFilteredMedicines(data);
@@ -53,7 +53,7 @@ const Medicines = () => {
       try {
         await ApiService.deleteMedicine(medicine.id);
         setMessage({ type: 'success', text: 'Medicine deleted successfully' });
-        fetchMedicines();
+        fetchMedicines(false);
       } catch (error) {
         setMessage({ type: 'error', text: 'Failed to delete medicine' });
       }
@@ -70,8 +70,10 @@ const Medicines = () => {
         setMessage({ type: 'success', text: 'Medicine created successfully' });
       }
       setShowModal(false);
-      fetchMedicines();
+      setSelectedMedicine(null);
+      await fetchMedicines(false);
     } catch (error) {
+      console.error('Submit error:', error);
       setMessage({ type: 'error', text: error.message });
     }
   };
