@@ -1,8 +1,19 @@
 import os
-from databases.database import engine, Base
+from urllib.parse import urlparse
+
+from databases.database import engine, Base, DATABASE_URL
 
 def delete_database():
-    db_path = r"D:\Mediq\backend\medicines.db"
+    parsed = urlparse(DATABASE_URL)
+    if parsed.scheme != "sqlite":
+        print(f"Refusing to delete non-sqlite DATABASE_URL: {DATABASE_URL}")
+        return False
+
+    db_path = parsed.path
+    if db_path.startswith("/") and os.name == "nt" and len(db_path) > 3 and db_path[2] == ":":
+        # SQLAlchemy sqlite URLs on Windows can look like /D:/path/to/db
+        db_path = db_path[1:]
+
     if os.path.exists(db_path):
         try:
             os.remove(db_path)

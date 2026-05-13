@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: mediq-api
+    env: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      # Set this in the Render dashboard to your frontend origin(s), comma-separated.
+      # Example: https://mediq.vercel.app
+      - key: CORS_ORIGINS
+        value: http://localhost:5173
+      # Optional: set to a persistent disk location or managed DB.
+      # - key: DATABASE_URL
+      #   value: sqlite:////var/data/mediq.db

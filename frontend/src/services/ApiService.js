@@ -1,4 +1,8 @@
-const API_BASE_URL = 'http://localhost:8000';
+// Split-deploy friendly:
+// - In production set VITE_API_BASE_URL to your backend URL (e.g. https://mediq-api.onrender.com)
+// - In local dev we default to /api and rely on Vite proxy to forward to http://localhost:8000
+const rawBaseUrl = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = (rawBaseUrl ?? '/api').replace(/\/+$/, '');
 
 class ApiService {
   static async request(endpoint, options = {}) {

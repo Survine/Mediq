@@ -5,25 +5,25 @@ The Mediq application now uses Clerk for authentication, providing a secure and 
 
 ## Features Implemented
 
-### 1. Login Page (`/src/components/Login.jsx`)
+### 1. Login Page (`/frontend/src/components/Login.jsx`)
 - **Clerk SignIn Component**: Integrated Clerk's SignIn component with custom styling
 - **Custom Appearance**: Styled to match the application's design with indigo theme
 - **Social Authentication**: Supports Google, Facebook, and other providers
 - **Email/Password**: Traditional authentication method
 - **Responsive Design**: Works on desktop and mobile devices
 
-### 2. Sign-Up Page (`/src/components/SignUp.jsx`)
+### 2. Sign-Up Page (`/frontend/src/components/SignUp.jsx`)
 - **Clerk SignUp Component**: Integrated Clerk's SignUp component
 - **Consistent Styling**: Matches the login page design
 - **Account Creation**: Handles user registration
 
-### 3. User Profile (`/src/resuables/Header.jsx`)
+### 3. User Profile (`/frontend/src/resuables/Header.jsx`)
 - **UserButton Component**: Displays user avatar and dropdown menu
 - **User Information**: Shows user's name and email
 - **Profile Management**: Access to user settings and profile
 - **Sign Out**: One-click logout functionality
 
-### 4. Route Protection (`/src/App.jsx`)
+### 4. Route Protection (`/frontend/src/App.jsx`)
 - **SignedIn/SignedOut**: Clerk components for route protection
 - **Automatic Redirects**: Redirects users based on authentication status
 - **Sign-up Route**: Dedicated route for user registration

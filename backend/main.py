@@ -1,30 +1,45 @@
+import os
+
 from fastapi import FastAPI
 from databases.database import Base, engine
 from Routes import medicine,order,customer,stock,user,invoice
 from fastapi.middleware.cors import CORSMiddleware
-from scalar_fastapi import get_scalar_api_reference
-
-app = FastAPI()
+from contextlib import asynccontextmanager
 
 
-@app.get("/scalar", include_in_schema=False)
-async def scalar_html():
-    return get_scalar_api_reference(
-        openapi_url=app.openapi_url,
-        title=app.title,
-    )
-origins = ["*"]
+def _cors_origins() -> list[str]:
+    raw = os.getenv("CORS_ORIGINS", "").strip()
+    if raw:
+        return [o.strip() for o in raw.split(",") if o.strip()]
+    # Reasonable local defaults
+    return [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:4173",
+    ]
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    # Ensure DB tables exist (safe to run repeatedly)
+    Base.metadata.create_all(bind=engine)
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
+    allow_origins=_cors_origins(),
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"]
 )
 
-# Create tables
-Base.metadata.create_all(bind=engine)
+
+@app.get("/health", tags=["Health"])
+def health():
+    return {"status": "ok"}
 
 # Include routes
 app.include_router(medicine.router, prefix="/medicines", tags=["Medicine"])
