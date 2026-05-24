@@ -313,8 +313,8 @@ def generate_invoice_html(invoice: InvoiceWithDetails) -> str:
                     <tr>
                         <td>{item.medicine_name}</td>
                         <td>{item.quantity}</td>
-                        <td class="amount-column">${item.unit_price:.2f}</td>
-                        <td class="amount-column">${item.total_price:.2f}</td>
+                        <td class="amount-column">₹{item.unit_price:.2f}</td>
+                        <td class="amount-column">₹{item.total_price:.2f}</td>
                     </tr>
         """
     
@@ -327,7 +327,7 @@ def generate_invoice_html(invoice: InvoiceWithDetails) -> str:
                 <table class="totals-table">
                     <tr>
                         <td>Subtotal:</td>
-                        <td class="amount-column">${subtotal:.2f}</td>
+                        <td class="amount-column">₹{subtotal:.2f}</td>
                     </tr>
     """
     
@@ -335,7 +335,7 @@ def generate_invoice_html(invoice: InvoiceWithDetails) -> str:
         html += f"""
                     <tr>
                         <td>Discount:</td>
-                        <td class="amount-column">-${invoice.discount:.2f}</td>
+                        <td class="amount-column">-₹{invoice.discount:.2f}</td>
                     </tr>
         """
     
@@ -343,14 +343,14 @@ def generate_invoice_html(invoice: InvoiceWithDetails) -> str:
         html += f"""
                     <tr>
                         <td>Tax:</td>
-                        <td class="amount-column">${invoice.tax:.2f}</td>
+                        <td class="amount-column">₹{invoice.tax:.2f}</td>
                     </tr>
         """
     
     html += f"""
                     <tr class="total-row">
                         <td>Total Amount:</td>
-                        <td class="amount-column">${invoice.total_amount:.2f}</td>
+                        <td class="amount-column">₹{invoice.total_amount:.2f}</td>
                     </tr>
                 </table>
             </div>

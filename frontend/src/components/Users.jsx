@@ -5,6 +5,7 @@ import Toolbar from "../resuables/Toolbar";
 import Table from "../resuables/Table";
 import UserModalForm from "../inputforms/UserModalForm";
 import StatusMessages from "../resuables/StatusMessages";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 import useAdminCRUD from "../hooks/useAdminCRUD";
 import useAdminSearch from "../hooks/useAdminSearch";
@@ -56,14 +57,14 @@ const Users = () => {
             className="text-blue-600 hover:text-blue-800 p-1"
             title="Edit"
           >
-            ✏️
+            <FaEdit />
           </button>
           <button
             onClick={() => handleDelete(user.id)}
             className="text-red-600 hover:text-red-800 p-1"
             title="Delete"
           >
-            🗑️
+            <FaTrash />
           </button>
         </div>
       )
@@ -161,7 +162,7 @@ const Users = () => {
 
   return (
     <>
-      <Header title="👥 Users Dashboard" description="Manage your application users" />
+      <Header title="Users Dashboard" description="Manage your application users" />
       
       <Toolbar
         onAddClick={handleCreateClick}

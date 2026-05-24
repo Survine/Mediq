@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FaTimes, FaCalculator, FaSave } from 'react-icons/fa';
 import ApiService from '../services/ApiService';
+import { formatCurrency } from '../utils/currency';
 
 const InvoiceModalForm = ({ isOpen, onClose, onSubmit, invoice = null, orders = [] }) => {
   const [formData, setFormData] = useState({
@@ -34,7 +35,7 @@ const InvoiceModalForm = ({ isOpen, onClose, onSubmit, invoice = null, orders = 
       // Creating new invoice - reset form
       const defaultDueDate = new Date();
       defaultDueDate.setDate(defaultDueDate.getDate() + 30);
-      
+
       setFormData({
         order_id: '',
         amount: '',
@@ -76,7 +77,7 @@ const InvoiceModalForm = ({ isOpen, onClose, onSubmit, invoice = null, orders = 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
@@ -112,13 +113,13 @@ const InvoiceModalForm = ({ isOpen, onClose, onSubmit, invoice = null, orders = 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
     setLoading(true);
-    
+
     try {
       const invoiceData = {
         ...formData,
@@ -142,7 +143,7 @@ const InvoiceModalForm = ({ isOpen, onClose, onSubmit, invoice = null, orders = 
   const getAvailableOrders = () => {
     if (invoice) {
       // When editing, show the current order plus other pending orders
-      return orders.filter(order => 
+      return orders.filter(order =>
         order.id === invoice.order_id || order.status === 'pending'
       );
     }
@@ -154,7 +155,7 @@ const InvoiceModalForm = ({ isOpen, onClose, onSubmit, invoice = null, orders = 
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-md shadow-sm w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-gray-200">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-gray-900">
@@ -187,7 +188,7 @@ const InvoiceModalForm = ({ isOpen, onClose, onSubmit, invoice = null, orders = 
               <option value="">Select an order</option>
               {getAvailableOrders().map(order => (
                 <option key={order.id} value={order.id}>
-                  Order #{order.id} - {order.customer_name || 'Unknown Customer'} - ${order.total_amount?.toFixed(2)}
+                  Order #{order.id} - {order.customer_name || 'Unknown Customer'} - {formatCurrency(order.total_amount)}
                 </option>
               ))}
             </select>
@@ -196,7 +197,7 @@ const InvoiceModalForm = ({ isOpen, onClose, onSubmit, invoice = null, orders = 
 
           {/* Selected Order Info */}
           {selectedOrder && (
-            <div className="bg-blue-50 p-4 rounded-lg">
+              <div className="bg-blue-50 p-4 rounded-md border border-blue-100">
               <h4 className="font-medium text-blue-900 mb-2">Selected Order Details</h4>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
@@ -209,7 +210,7 @@ const InvoiceModalForm = ({ isOpen, onClose, onSubmit, invoice = null, orders = 
                 </div>
                 <div>
                   <span className="text-blue-700">Order Amount:</span>
-                  <span className="ml-2 font-medium">${selectedOrder.total_amount?.toFixed(2)}</span>
+                  <span className="ml-2 font-medium">{formatCurrency(selectedOrder.total_amount)}</span>
                 </div>
                 <div>
                   <span className="text-blue-700">Status:</span>
@@ -230,7 +231,7 @@ const InvoiceModalForm = ({ isOpen, onClose, onSubmit, invoice = null, orders = 
                 Amount <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-3 text-gray-500">$</span>
+                <span className="absolute left-3 top-3 text-gray-500">₹</span>
                 <input
                   type="number"
                   name="amount"
@@ -251,7 +252,7 @@ const InvoiceModalForm = ({ isOpen, onClose, onSubmit, invoice = null, orders = 
                 Discount
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-3 text-gray-500">$</span>
+                <span className="absolute left-3 top-3 text-gray-500">₹</span>
                 <input
                   type="number"
                   name="discount"
@@ -272,7 +273,7 @@ const InvoiceModalForm = ({ isOpen, onClose, onSubmit, invoice = null, orders = 
                 Tax
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-3 text-gray-500">$</span>
+                <span className="absolute left-3 top-3 text-gray-500">₹</span>
                 <input
                   type="number"
                   name="tax"
@@ -290,20 +291,20 @@ const InvoiceModalForm = ({ isOpen, onClose, onSubmit, invoice = null, orders = 
           </div>
 
           {/* Total Calculation Display */}
-          <div className="bg-gray-50 p-4 rounded-lg">
+          <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <FaCalculator className="text-gray-500 mr-2" />
                 <span className="font-medium">Total Amount:</span>
               </div>
               <span className="text-2xl font-bold text-green-600">
-                ${calculatedTotal.toFixed(2)}
+                {formatCurrency(calculatedTotal)}
               </span>
             </div>
             <div className="text-sm text-gray-600 mt-2">
-              Amount: ${(parseFloat(formData.amount) || 0).toFixed(2)} - 
-              Discount: ${(parseFloat(formData.discount) || 0).toFixed(2)} + 
-              Tax: ${(parseFloat(formData.tax) || 0).toFixed(2)}
+              Amount: {formatCurrency(parseFloat(formData.amount) || 0)} -
+              Discount: {formatCurrency(parseFloat(formData.discount) || 0)} +
+              Tax: {formatCurrency(parseFloat(formData.tax) || 0)}
             </div>
           </div>
 
@@ -353,7 +354,7 @@ const InvoiceModalForm = ({ isOpen, onClose, onSubmit, invoice = null, orders = 
 
           {/* Error Message */}
           {errors.submit && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <div className="bg-red-50 border border-red-200 rounded-md p-4">
               <p className="text-red-800">{errors.submit}</p>
             </div>
           )}
@@ -363,7 +364,7 @@ const InvoiceModalForm = ({ isOpen, onClose, onSubmit, invoice = null, orders = 
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+              className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
               disabled={loading}
             >
               Cancel
@@ -371,7 +372,7 @@ const InvoiceModalForm = ({ isOpen, onClose, onSubmit, invoice = null, orders = 
             <button
               type="submit"
               disabled={loading}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center"
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center"
             >
               {loading ? (
                 <>

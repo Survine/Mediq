@@ -4,9 +4,9 @@ const Header = ({ title, description }) => {
   const { user } = useUser();
 
   return (
-    <div className="p-6 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border-b border-white/30 flex items-center justify-between">
+    <div className="p-5 bg-white border border-gray-200 rounded-md flex items-center justify-between">
       <div>
-        <h1 className="text-3xl font-bold text-gray-800">{title}</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
         <p className="text-gray-600 mt-1">{description}</p>
       </div>
       

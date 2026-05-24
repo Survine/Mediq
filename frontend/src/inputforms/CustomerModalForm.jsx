@@ -73,7 +73,7 @@ const CustomerModalForm = ({
       onClick={handleOverlayClick}
       className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/30 z-50 p-4 overflow-auto"
     >
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-md border border-gray-200 my-8">
+      <div className="bg-white rounded-md shadow-sm w-full max-w-md border border-gray-200 my-8">
         <div className="p-4 flex justify-end sticky top-0 bg-white z-10">
           <button
             onClick={onClose}
@@ -89,7 +89,7 @@ const CustomerModalForm = ({
           </h2>
 
           {error && (
-            <div className="mb-4 p-2 bg-red-100 border-l-4 border-red-500 text-red-700 rounded">
+            <div className="mb-4 p-2 bg-red-50 border border-red-300 text-red-700 rounded-md">
               <p>{error}</p>
             </div>
           )}
@@ -104,7 +104,7 @@ const CustomerModalForm = ({
                 type="text"
                 value={currentFormData.name}
                 onChange={(e) => currentSetFormData({ ...currentFormData, name: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 disabled={isLoading}
                 required
               />
@@ -119,7 +119,7 @@ const CustomerModalForm = ({
                 type="email"
                 value={currentFormData.email}
                 onChange={(e) => currentSetFormData({ ...currentFormData, email: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 disabled={isLoading}
                 required
               />
@@ -134,7 +134,7 @@ const CustomerModalForm = ({
                 type="tel"
                 value={currentFormData.phone}
                 onChange={(e) => currentSetFormData({ ...currentFormData, phone: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 disabled={isLoading}
                 required
               />
@@ -148,7 +148,7 @@ const CustomerModalForm = ({
               <textarea
                 value={currentFormData.address}
                 onChange={(e) => currentSetFormData({ ...currentFormData, address: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 disabled={isLoading}
                 rows={3}
                 required
@@ -159,14 +159,14 @@ const CustomerModalForm = ({
           <div className="mt-6 flex justify-end gap-3">
             <button
               onClick={onClose}
-              className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800 transition-colors"
+              className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-800 transition-colors"
               disabled={isLoading}
             >
               Cancel
             </button>
             <button
               onClick={handleSubmit}
-              className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white transition-colors disabled:opacity-50"
+              className="px-4 py-2 rounded-md bg-green-600 hover:bg-green-700 text-white transition-colors disabled:opacity-50"
               disabled={isLoading || !currentFormData.name.trim() || !currentFormData.email.trim() || !currentFormData.phone.trim()}
             >
               {isLoading ? "Saving..." : customer ? "Update" : "Create"}

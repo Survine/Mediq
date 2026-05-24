@@ -140,7 +140,7 @@ const Customers = () => {
           </button>
           <button
             onClick={() => handleEdit(customer)}
-            className="text-indigo-600 hover:text-indigo-800 p-1"
+            className="text-blue-600 hover:text-blue-800 p-1"
             title="Edit"
           >
             <FaEdit />
@@ -181,7 +181,7 @@ const Customers = () => {
       <StatusMessages message={message} onClose={() => setMessage({ type: '', text: '' })} />
 
       {/* Search and Filters */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
+      <div className="bg-white border border-gray-200 rounded-md p-5">
         <SearchBar 
           onSearch={handleSearch}
           placeholder="Search customers by name, email, or phone..."
@@ -190,7 +190,7 @@ const Customers = () => {
       </div>
 
       {/* Customers Table */}
-      <div className="bg-white rounded-lg shadow-sm">
+      <div className="bg-white border border-gray-200 rounded-md">
         <div className="p-6 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-900">
             All Customers ({filteredCustomers.length})

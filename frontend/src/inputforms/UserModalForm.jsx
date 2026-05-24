@@ -29,7 +29,7 @@ const UserModalForm = ({
       onClick={handleOverlayClick}
       className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/30 z-50 p-4 overflow-auto"
     >
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-md border border-gray-200 my-8">
+      <div className="bg-white rounded-md shadow-sm w-full max-w-md border border-gray-200 my-8">
         {/* Add my-8 for vertical margin */}
         <div className="p-4 flex justify-end sticky top-0 bg-white z-10">
           {/* Make close button sticky */}
@@ -46,7 +46,7 @@ const UserModalForm = ({
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">{title}</h2>
 
           {error && (
-            <div className="mb-4 p-2 bg-red-100 border-l-4 border-red-500 text-red-700 rounded">
+            <div className="mb-4 p-2 bg-red-50 border border-red-300 text-red-700 rounded-md">
               <p>{error}</p>
             </div>
           )}
@@ -61,7 +61,7 @@ const UserModalForm = ({
                 type="text"
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 disabled={isLoading}
               />
             </div>
@@ -75,7 +75,7 @@ const UserModalForm = ({
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 disabled={isLoading}
               />
             </div>
@@ -89,9 +89,9 @@ const UserModalForm = ({
                 type="password"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 disabled={isLoading}
-                placeholder={isCreating ? "" : "•••••••• (leave blank to preserve existing)"}
+                placeholder={isCreating ? "" : "******** (leave blank to preserve existing)"}
               />
             </div>
 
@@ -103,7 +103,7 @@ const UserModalForm = ({
                   type="checkbox"
                   checked={formData.is_admin}
                   onChange={(e) => setFormData({ ...formData, is_admin: e.target.checked })}
-                  className="h-4 w-4 rounded border-gray-300 focus:ring-indigo-400"
+                  className="h-4 w-4 rounded border-gray-300 focus:ring-blue-400"
                   disabled={isLoading}
                 />
               </label>
@@ -113,14 +113,14 @@ const UserModalForm = ({
           <div className="mt-6 flex justify-end gap-3">
             <button
               onClick={onClose}
-              className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800 transition-colors"
+              className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-800 transition-colors"
               disabled={isLoading}
             >
               Cancel
             </button>
             <button
               onClick={onSubmit}
-              className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 shadow-md hover:shadow-lg transition-all"
+              className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-colors"
               disabled={isLoading}
             >
               {isLoading ? "Saving..." : "Save"}

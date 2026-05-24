@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { FaWarehouse, FaTimes } from 'react-icons/fa';
+import { formatCurrency } from '../utils/currency';
 
 const StockModalForm = ({ stock, medicines, onSubmit, onClose }) => {
   const [formData, setFormData] = useState({
@@ -51,7 +52,7 @@ const StockModalForm = ({ stock, medicines, onSubmit, onClose }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/30 z-50 p-4 overflow-auto">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-md border border-gray-200 my-8">
+      <div className="bg-white rounded-md shadow-sm w-full max-w-md border border-gray-200 my-8">
         <div className="p-6 border-b border-gray-200 flex items-center justify-between">
           <h2 className="text-2xl font-semibold text-gray-800 flex items-center">
             <FaWarehouse className="mr-2 text-blue-500" />
@@ -67,7 +68,7 @@ const StockModalForm = ({ stock, medicines, onSubmit, onClose }) => {
 
         <form onSubmit={handleSubmit} className="p-6">
           {error && (
-            <div className="mb-4 p-3 bg-red-100 border-l-4 border-red-500 text-red-700 rounded">
+            <div className="mb-4 p-3 bg-red-50 border border-red-300 text-red-700 rounded-md">
               {error}
             </div>
           )}
@@ -80,14 +81,14 @@ const StockModalForm = ({ stock, medicines, onSubmit, onClose }) => {
               <select
                 value={formData.medicine_id}
                 onChange={(e) => setFormData({ ...formData, medicine_id: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
                 disabled={loading}
               >
                 <option value="">Select a medicine</option>
                 {medicines.map((medicine) => (
                   <option key={medicine.id} value={medicine.id}>
-                    {medicine.name} - ${medicine.price}
+                    {medicine.name} - {formatCurrency(medicine.price)}
                   </option>
                 ))}
               </select>
@@ -102,7 +103,7 @@ const StockModalForm = ({ stock, medicines, onSubmit, onClose }) => {
                 min="0"
                 value={formData.quantity}
                 onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter quantity"
                 required
                 disabled={loading}
@@ -117,7 +118,7 @@ const StockModalForm = ({ stock, medicines, onSubmit, onClose }) => {
                 type="text"
                 value={formData.batch_number}
                 onChange={(e) => setFormData({ ...formData, batch_number: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter batch number (optional)"
                 disabled={loading}
               />
@@ -131,7 +132,7 @@ const StockModalForm = ({ stock, medicines, onSubmit, onClose }) => {
                 type="date"
                 value={formData.expiry_date}
                 onChange={(e) => setFormData({ ...formData, expiry_date: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={loading}
               />
             </div>
@@ -143,10 +144,10 @@ const StockModalForm = ({ stock, medicines, onSubmit, onClose }) => {
                   <span className="font-medium">Name:</span> {selectedMedicine.name}
                 </p>
                 <p className="text-sm text-blue-700">
-                  <span className="font-medium">Price:</span> ${selectedMedicine.price}
+                  <span className="font-medium">Price:</span> {formatCurrency(selectedMedicine.price)}
                 </p>
                 <p className="text-sm text-blue-700">
-                  <span className="font-medium">Total Value:</span> ${(selectedMedicine.price * (parseInt(formData.quantity) || 0)).toFixed(2)}
+                  <span className="font-medium">Total Value:</span> {formatCurrency(selectedMedicine.price * (parseInt(formData.quantity) || 0))}
                 </p>
               </div>
             )}
@@ -156,14 +157,14 @@ const StockModalForm = ({ stock, medicines, onSubmit, onClose }) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800 transition-colors"
+              className="px-6 py-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-800 transition-colors"
               disabled={loading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors disabled:opacity-50"
+              className="px-6 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white transition-colors disabled:opacity-50"
               disabled={loading || !formData.medicine_id || !formData.quantity}
             >
               {loading ? 'Saving...' : stock ? 'Update Stock' : 'Add Stock'}

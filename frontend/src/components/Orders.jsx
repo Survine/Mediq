@@ -5,6 +5,7 @@ import OrderModalForm from '../inputforms/OrderModalForm';
 import Table from '../resuables/Table';
 import SearchBar from '../resuables/SearchBar';
 import StatusMessages from '../resuables/StatusMessages';
+import { formatCurrency } from '../utils/currency';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -32,7 +33,7 @@ const Orders = () => {
   };
 
   const handleSearch = (searchTerm) => {
-    const filtered = orders.filter(order => 
+    const filtered = orders.filter(order =>
       order.id.toString().includes(searchTerm) ||
       order.customer_id.toString().includes(searchTerm) ||
       order.status.toLowerCase().includes(searchTerm.toLowerCase())
@@ -53,7 +54,7 @@ const Orders = () => {
   const handleView = async (order) => {
     try {
       const orderDetails = await ApiService.getOrderById(order.id);
-      alert(`Order Details:\nID: ${orderDetails.id}\nCustomer: ${orderDetails.customer?.name || orderDetails.customer_id}\nTotal: $${orderDetails.total_amount}\nStatus: ${orderDetails.status}\nItems: ${orderDetails.order_medicines?.length || 0}`);
+      alert(`Order Details:\nID: ${orderDetails.id}\nCustomer: ${orderDetails.customer?.name || orderDetails.customer_id}\nTotal: ${formatCurrency(orderDetails.total_amount)}\nStatus: ${orderDetails.status}\nItems: ${orderDetails.order_medicines?.length || 0}`);
     } catch (error) {
       setMessage({ type: 'error', text: 'Failed to fetch order details' });
     }
@@ -115,7 +116,7 @@ const Orders = () => {
       key: 'total_amount',
       header: 'Total Amount',
       render: (value) => (
-        <span className="text-green-600 font-semibold">${parseFloat(value).toFixed(2)}</span>
+        <span className="text-green-600 font-semibold">{formatCurrency(value)}</span>
       )
     },
     {
@@ -141,7 +142,7 @@ const Orders = () => {
           </button>
           <button
             onClick={() => handleEdit(order)}
-            className="text-indigo-600 hover:text-indigo-800 p-1"
+            className="text-blue-600 hover:text-blue-800 p-1"
             title="Edit"
           >
             <FaEdit />
@@ -182,8 +183,8 @@ const Orders = () => {
       <StatusMessages message={message} onClose={() => setMessage({ type: '', text: '' })} />
 
       {/* Search and Filters */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <SearchBar 
+      <div className="bg-white border border-gray-200 rounded-md p-5">
+        <SearchBar
           onSearch={handleSearch}
           placeholder="Search orders by ID, customer ID, or status..."
           icon={FaSearch}
@@ -191,19 +192,19 @@ const Orders = () => {
       </div>
 
       {/* Orders Table */}
-      <div className="bg-white rounded-lg shadow-sm">
+      <div className="bg-white border border-gray-200 rounded-md">
         <div className="p-6 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-900">
             All Orders ({filteredOrders.length})
           </h2>
         </div>
-        
+
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
           </div>
         ) : (
-          <Table 
+          <Table
             data={filteredOrders}
             columns={columns}
             emptyMessage="No orders found. Create your first order to get started."

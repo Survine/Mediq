@@ -76,7 +76,7 @@ const MedicineModalForm = ({
       onClick={handleOverlayClick}
       className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/30 z-50 p-4 overflow-auto"
     >
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-md border border-gray-200 my-8">
+      <div className="bg-white rounded-md shadow-sm w-full max-w-md border border-gray-200 my-8">
         <div className="p-4 flex justify-between items-center border-b border-gray-200">
           <h2 className="text-2xl font-semibold text-gray-800 flex items-center">
             <FaPills className="mr-2 text-blue-500" />
@@ -93,7 +93,7 @@ const MedicineModalForm = ({
 
         <form onSubmit={handleSubmit} className="p-6">
           {error && (
-            <div className="mb-4 p-3 bg-red-100 border-l-4 border-red-500 text-red-700 rounded">
+            <div className="mb-4 p-3 bg-red-50 border border-red-300 text-red-700 rounded-md">
               <p>{error}</p>
             </div>
           )}
@@ -107,7 +107,7 @@ const MedicineModalForm = ({
                 type="text"
                 value={currentFormData.name}
                 onChange={(e) => currentSetFormData({ ...currentFormData, name: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Enter medicine name"
                 disabled={isLoading}
                 required
@@ -125,7 +125,7 @@ const MedicineModalForm = ({
                 min="0"
                 value={currentFormData.price}
                 onChange={(e) => currentSetFormData({ ...currentFormData, price: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="0.00"
                 disabled={isLoading}
                 required
@@ -137,14 +137,14 @@ const MedicineModalForm = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800 transition-colors"
+              className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-800 transition-colors"
               disabled={isLoading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors disabled:opacity-50"
+              className="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white transition-colors disabled:opacity-50"
               disabled={isLoading || !currentFormData.name.trim() || !String(currentFormData.price).trim()}
             >
               {isLoading ? "Saving..." : medicine ? "Update" : "Create"}

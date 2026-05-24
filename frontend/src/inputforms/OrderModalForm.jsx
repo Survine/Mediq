@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FaShoppingCart, FaTimes, FaPlus, FaTrash } from 'react-icons/fa';
 import ApiService from '../services/ApiService';
+import { formatCurrency } from '../utils/currency';
 
 const OrderModalForm = ({ order, onSubmit, onClose }) => {
   const [formData, setFormData] = useState({
@@ -117,7 +118,7 @@ const OrderModalForm = ({ order, onSubmit, onClose }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/30 z-50 p-4 overflow-auto">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl border border-gray-200 my-8 max-h-[90vh] overflow-hidden">
+      <div className="bg-white rounded-md shadow-sm w-full max-w-4xl border border-gray-200 my-8 max-h-[90vh] overflow-hidden">
         <div className="p-6 border-b border-gray-200 flex items-center justify-between">
           <h2 className="text-2xl font-semibold text-gray-800 flex items-center">
             <FaShoppingCart className="mr-2 text-purple-500" />
@@ -133,7 +134,7 @@ const OrderModalForm = ({ order, onSubmit, onClose }) => {
 
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto">
           {error && (
-            <div className="mb-4 p-3 bg-red-100 border-l-4 border-red-500 text-red-700 rounded">
+            <div className="mb-4 p-3 bg-red-50 border border-red-300 text-red-700 rounded-md">
               {error}
             </div>
           )}
@@ -167,7 +168,7 @@ const OrderModalForm = ({ order, onSubmit, onClose }) => {
               <button
                 type="button"
                 onClick={addMedicineItem}
-                className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded-lg flex items-center text-sm"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md flex items-center text-sm"
               >
                 <FaPlus className="mr-1" />
                 Add Medicine
@@ -181,7 +182,7 @@ const OrderModalForm = ({ order, onSubmit, onClose }) => {
             ) : (
               <div className="space-y-3">
                 {formData.order_medicines.map((item, index) => (
-                  <div key={index} className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg">
+                  <div key={index} className="flex items-center gap-3 p-3 border border-gray-200 rounded-md">
                     <div className="flex-1">
                       <select
                         value={item.medicine_id}
@@ -192,7 +193,7 @@ const OrderModalForm = ({ order, onSubmit, onClose }) => {
                         <option value="">Select medicine</option>
                         {medicines.map((medicine) => (
                           <option key={medicine.id} value={String(medicine.id)}>
-                            {medicine.name} - ${medicine.price}
+                            {medicine.name} - {formatCurrency(medicine.price)}
                           </option>
                         ))}
                       </select>
@@ -224,7 +225,7 @@ const OrderModalForm = ({ order, onSubmit, onClose }) => {
                     </div>
                     
                     <div className="w-20 text-right font-semibold text-green-600">
-                      ${((parseInt(item.quantity) || 0) * (parseFloat(item.unit_price) || 0)).toFixed(2)}
+                      {formatCurrency((parseInt(item.quantity) || 0) * (parseFloat(item.unit_price) || 0))}
                     </div>
                     
                     <button
@@ -245,7 +246,7 @@ const OrderModalForm = ({ order, onSubmit, onClose }) => {
             <div className="mb-6 p-4 bg-gray-50 rounded-lg">
               <div className="flex justify-between items-center">
                 <span className="text-lg font-semibold text-gray-700">Total Amount:</span>
-                <span className="text-2xl font-bold text-green-600">${getTotalAmount().toFixed(2)}</span>
+                <span className="text-2xl font-bold text-green-600">{formatCurrency(getTotalAmount())}</span>
               </div>
             </div>
           )}
@@ -255,14 +256,14 @@ const OrderModalForm = ({ order, onSubmit, onClose }) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800 transition-colors"
+              className="px-6 py-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-800 transition-colors"
               disabled={loading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white transition-colors disabled:opacity-50"
+              className="px-6 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white transition-colors disabled:opacity-50"
               disabled={loading || formData.order_medicines.length === 0}
             >
               {loading ? 'Saving...' : order ? 'Update Order' : 'Create Order'}

@@ -5,6 +5,7 @@ import MedicineModalForm from '../inputforms/MedicineModalForm';
 import Table from '../resuables/Table';
 import SearchBar from '../resuables/SearchBar';
 import StatusMessages from '../resuables/StatusMessages';
+import { formatCurrency } from '../utils/currency';
 
 const Medicines = () => {
   const [medicines, setMedicines] = useState([]);
@@ -98,7 +99,7 @@ const Medicines = () => {
       key: 'price',
       header: 'Price',
       render: (value) => (
-        <span className="text-green-600 font-semibold">${parseFloat(value).toFixed(2)}</span>
+        <span className="text-green-600 font-semibold">{formatCurrency(value)}</span>
       )
     },
     {
@@ -149,8 +150,8 @@ const Medicines = () => {
       <StatusMessages message={message} onClose={() => setMessage({ type: '', text: '' })} />
 
       {/* Search and Filters */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <SearchBar 
+      <div className="bg-white border border-gray-200 rounded-md p-5">
+        <SearchBar
           onSearch={handleSearch}
           placeholder="Search medicines by name..."
           icon={FaSearch}
@@ -158,19 +159,19 @@ const Medicines = () => {
       </div>
 
       {/* Medicines Table */}
-      <div className="bg-white rounded-lg shadow-sm">
+      <div className="bg-white border border-gray-200 rounded-md">
         <div className="p-6 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-900">
             All Medicines ({filteredMedicines.length})
           </h2>
         </div>
-        
+
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           </div>
         ) : (
-          <Table 
+          <Table
             data={filteredMedicines}
             columns={columns}
             emptyMessage="No medicines found. Add your first medicine to get started."

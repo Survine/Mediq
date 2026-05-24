@@ -5,6 +5,7 @@ import Table from '../resuables/Table';
 import SearchBar from '../resuables/SearchBar';
 import StatusMessages from '../resuables/StatusMessages';
 import InvoiceModalForm from '../inputforms/InvoiceModalForm';
+import { formatCurrency } from '../utils/currency';
 
 const Invoices = () => {
   const [invoices, setInvoices] = useState([]);
@@ -60,7 +61,7 @@ const Invoices = () => {
 
   const handleSearch = (searchTerm) => {
     let filtered = invoices;
-    
+
     // Apply status filter first
     if (statusFilter !== 'all') {
       filtered = filtered.filter(invoice => invoice.status === statusFilter);
@@ -68,7 +69,7 @@ const Invoices = () => {
 
     // Then apply search
     if (searchTerm) {
-      filtered = filtered.filter(invoice => 
+      filtered = filtered.filter(invoice =>
         invoice.invoice_number?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         invoice.id.toString().includes(searchTerm) ||
         invoice.order_id.toString().includes(searchTerm)
@@ -126,7 +127,7 @@ const Invoices = () => {
       const printWindow = window.open('', '_blank', 'width=800,height=600');
       printWindow.document.write(htmlContent);
       printWindow.document.close();
-      
+
       // Trigger print after a short delay
       setTimeout(() => {
         printWindow.print();
@@ -225,7 +226,7 @@ const Invoices = () => {
       key: 'total_amount',
       header: 'Total Amount',
       render: (value) => (
-        <span className="text-green-600 font-semibold">${parseFloat(value).toFixed(2)}</span>
+        <span className="text-green-600 font-semibold">{formatCurrency(value)}</span>
       )
     },
     {
@@ -330,7 +331,7 @@ const Invoices = () => {
 
       {/* Invoice Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-white border border-gray-200 rounded-md p-5">
           <div className="flex items-center">
             <div className="bg-blue-100 rounded-lg p-3">
               <FaFileInvoice className="text-blue-600 text-xl" />
@@ -342,31 +343,31 @@ const Invoices = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-white border border-gray-200 rounded-md p-5">
           <div className="flex items-center">
             <div className="bg-green-100 rounded-lg p-3">
               <FaMoneyCheckAlt className="text-green-600 text-xl" />
             </div>
             <div className="ml-4">
               <h3 className="text-sm font-medium text-gray-500">Total Revenue</h3>
-              <p className="text-2xl font-bold text-green-600">${totalRevenue.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-green-600">{formatCurrency(totalRevenue)}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-white border border-gray-200 rounded-md p-5">
           <div className="flex items-center">
             <div className="bg-yellow-100 rounded-lg p-3">
               <FaFileInvoice className="text-yellow-600 text-xl" />
             </div>
             <div className="ml-4">
               <h3 className="text-sm font-medium text-gray-500">Pending Amount</h3>
-              <p className="text-2xl font-bold text-yellow-600">${pendingAmount.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-yellow-600">{formatCurrency(pendingAmount)}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-white border border-gray-200 rounded-md p-5">
           <div className="flex items-center">
             <div className="bg-red-100 rounded-lg p-3">
               <FaExclamationTriangle className="text-red-600 text-xl" />
@@ -380,7 +381,7 @@ const Invoices = () => {
       </div>
 
       {/* Status Filter Tabs */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
+      <div className="bg-white border border-gray-200 rounded-md p-5">
         <div className="flex flex-wrap gap-2 mb-4">
           {statusOptions.map((option) => (
             <button
@@ -397,7 +398,7 @@ const Invoices = () => {
           ))}
         </div>
 
-        <SearchBar 
+        <SearchBar
           onSearch={handleSearch}
           placeholder="Search invoices by invoice number, ID, or order ID..."
           icon={FaSearch}
@@ -405,24 +406,24 @@ const Invoices = () => {
       </div>
 
       {/* Invoices Table */}
-      <div className="bg-white rounded-lg shadow-sm">
+      <div className="bg-white border border-gray-200 rounded-md">
         <div className="p-6 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-900">
-            {statusFilter === 'all' ? 'All Invoices' : `${statusOptions.find(opt => opt.value === statusFilter)?.label} Invoices`} 
+            {statusFilter === 'all' ? 'All Invoices' : `${statusOptions.find(opt => opt.value === statusFilter)?.label} Invoices`}
             ({filteredInvoices.length})
           </h2>
         </div>
-        
+
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           </div>
         ) : (
-          <Table 
+          <Table
             data={filteredInvoices}
             columns={columns}
             emptyMessage={
-              statusFilter === 'all' 
+              statusFilter === 'all'
                 ? "No invoices found. Create an invoice from completed orders."
                 : `No ${statusOptions.find(opt => opt.value === statusFilter)?.label.toLowerCase()} invoices found.`
             }

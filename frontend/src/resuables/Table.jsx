@@ -13,15 +13,15 @@ const Table = ({
   const isDataLoading = isLoading || loading;
   
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+    <div className="overflow-x-auto border border-gray-200 rounded-md">
+      <table className="min-w-full divide-y divide-gray-200 bg-white">
+        <thead className="bg-gray-100">
           <tr>
             {columns.map((column) => (
               <th 
                 key={column.key}
                 scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase"
               >
                 {column.header || column.title}
               </th>
@@ -35,7 +35,7 @@ const Table = ({
                 {columns.map((column) => (
                   <td 
                     key={`${item.id}-${column.key}`}
-                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                    className="px-4 py-3 whitespace-nowrap text-sm text-gray-900"
                   >
                     {column.render ? column.render(item[column.key], item) : item[column.key]}
                   </td>
@@ -50,7 +50,7 @@ const Table = ({
               >
                 {isDataLoading ? (
                   <div className="flex items-center justify-center py-4">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600"></div>
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
                     <span className="ml-2">Loading...</span>
                   </div>
                 ) : (

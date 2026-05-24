@@ -20,7 +20,7 @@ const SearchBar = ({
         const clearSearch = () => setSearchTerm('');
 
         return (
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
                 {searchOptions && (
                     <select
                         value={searchType}
@@ -28,7 +28,7 @@ const SearchBar = ({
                             setSearchType(e.target.value);
                             setSearchTerm('');
                         }}
-                        className="bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                        className="bg-white border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                         disabled={isLoading}
                     >
                         {searchOptions.map(option => (
@@ -43,7 +43,7 @@ const SearchBar = ({
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         placeholder={`Search by ${searchType}...`}
-                        className="bg-white border border-gray-300 rounded-lg pl-10 pr-12 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400 w-64"
+                        className="bg-white border border-gray-300 rounded-md pl-10 pr-12 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 w-64"
                         disabled={isLoading}
                         min={searchType === "id" ? 1 : undefined}
                     />
@@ -84,7 +84,7 @@ const SearchBar = ({
                 value={localSearchTerm}
                 onChange={handleInputChange}
                 placeholder={placeholder}
-                className="w-full bg-white border border-gray-300 rounded-lg pl-10 pr-12 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                className="w-full bg-white border border-gray-300 rounded-md pl-10 pr-12 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             <Icon className="absolute left-3 top-3 text-gray-400" />
             {localSearchTerm && (

@@ -26,7 +26,7 @@ const Inventory = () => {
         ApiService.getStocks(),
         ApiService.getMedicines()
       ]);
-      
+
       // Create a medicine lookup map
       const medicineMap = {};
       medicinesData.forEach(med => {
@@ -105,7 +105,7 @@ const Inventory = () => {
 
   const getExpiryStatus = (expiryDate) => {
     if (!expiryDate) return { color: 'text-gray-500', text: 'No expiry date' };
-    
+
     const expiry = new Date(expiryDate);
     const now = new Date();
     const diffTime = expiry - now;
@@ -174,7 +174,7 @@ const Inventory = () => {
         <div className="flex space-x-2">
           <button
             onClick={() => handleEdit(stock)}
-            className="text-indigo-600 hover:text-indigo-800 p-1"
+            className="text-blue-600 hover:text-blue-800 p-1"
             title="Edit"
           >
             <FaEdit />
@@ -231,7 +231,7 @@ const Inventory = () => {
 
       {/* Inventory Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-white border border-gray-200 rounded-md p-5">
           <div className="flex items-center">
             <div className="bg-blue-100 rounded-lg p-3">
               <FaWarehouse className="text-blue-600 text-xl" />
@@ -243,7 +243,7 @@ const Inventory = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-white border border-gray-200 rounded-md p-5">
           <div className="flex items-center">
             <div className="bg-red-100 rounded-lg p-3">
               <FaExclamationTriangle className="text-red-600 text-xl" />
@@ -255,7 +255,7 @@ const Inventory = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-white border border-gray-200 rounded-md p-5">
           <div className="flex items-center">
             <div className="bg-orange-100 rounded-lg p-3">
               <FaExclamationTriangle className="text-orange-600 text-xl" />
@@ -267,7 +267,7 @@ const Inventory = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-white border border-gray-200 rounded-md p-5">
           <div className="flex items-center">
             <div className="bg-red-100 rounded-lg p-3">
               <FaExclamationTriangle className="text-red-600 text-xl" />
@@ -281,8 +281,8 @@ const Inventory = () => {
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <SearchBar 
+      <div className="bg-white border border-gray-200 rounded-md p-5">
+        <SearchBar
           onSearch={handleSearch}
           placeholder="Search by medicine name, batch number, or quantity..."
           icon={FaSearch}
@@ -290,19 +290,19 @@ const Inventory = () => {
       </div>
 
       {/* Inventory Table */}
-      <div className="bg-white rounded-lg shadow-sm">
+      <div className="bg-white border border-gray-200 rounded-md">
         <div className="p-6 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-900">
             Stock Inventory ({filteredStocks.length})
           </h2>
         </div>
-        
+
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           </div>
         ) : (
-          <Table 
+          <Table
             data={filteredStocks}
             columns={columns}
             emptyMessage="No stock items found. Add your first stock entry to get started."

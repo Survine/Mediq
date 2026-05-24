@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  FaPills, 
-  FaUsers, 
-  FaShoppingCart, 
-  FaWarehouse, 
-  FaFileInvoice, 
-  FaArrowUp, 
-  FaArrowDown,
+import {
+  FaPills,
+  FaUsers,
+  FaShoppingCart,
+  FaWarehouse,
+  FaFileInvoice,
   FaExclamationTriangle
 } from 'react-icons/fa';
 import ApiService from '../services/ApiService';
+import { formatCurrency } from '../utils/currency';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -40,7 +39,7 @@ const Dashboard = () => {
 
       // Calculate total revenue from orders
       const totalRevenue = orders.reduce((sum, order) => sum + order.total_amount, 0);
-      
+
       // Find low stock items (quantity < 10)
       const lowStock = stocks.filter(stock => stock.quantity < 10);
 
@@ -55,7 +54,7 @@ const Dashboard = () => {
       // Set recent orders (last 5)
       setRecentOrders(orders.slice(-5).reverse());
       setLowStockMedicines(lowStock.slice(0, 5));
-      
+
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
     } finally {
@@ -68,35 +67,35 @@ const Dashboard = () => {
       title: 'Total Medicines',
       value: stats.medicines,
       icon: FaPills,
-      color: 'bg-blue-500',
+      color: 'bg-blue-100 text-blue-700',
       link: '/medicines'
     },
     {
       title: 'Total Customers',
       value: stats.customers,
       icon: FaUsers,
-      color: 'bg-green-500',
+      color: 'bg-green-100 text-green-700',
       link: '/customers'
     },
     {
       title: 'Total Orders',
       value: stats.orders,
       icon: FaShoppingCart,
-      color: 'bg-purple-500',
+      color: 'bg-purple-100 text-purple-700',
       link: '/orders'
     },
     {
       title: 'Total Revenue',
-      value: `$${stats.totalRevenue.toFixed(2)}`,
+      value: formatCurrency(stats.totalRevenue),
       icon: FaFileInvoice,
-      color: 'bg-yellow-500',
+      color: 'bg-yellow-100 text-yellow-700',
       link: '/invoices'
     },
     {
       title: 'Low Stock Items',
       value: stats.lowStockItems,
       icon: FaExclamationTriangle,
-      color: 'bg-red-500',
+      color: 'bg-red-100 text-red-700',
       link: '/inventory'
     }
   ];
@@ -104,7 +103,7 @@ const Dashboard = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600"></div>
       </div>
     );
   }
@@ -113,7 +112,7 @@ const Dashboard = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
         <p className="text-gray-600 mt-1">Welcome to your medicine management dashboard</p>
       </div>
 
@@ -125,10 +124,10 @@ const Dashboard = () => {
             <Link
               key={index}
               to={card.link}
-              className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow"
+              className="bg-white border border-gray-200 rounded-md p-5 hover:border-blue-300 transition-colors"
             >
               <div className="flex items-center">
-                <div className={`${card.color} rounded-lg p-3 text-white`}>
+                <div className={`${card.color} rounded-md p-3`}>
                   <Icon className="text-xl" />
                 </div>
                 <div className="ml-4">
@@ -144,13 +143,13 @@ const Dashboard = () => {
       {/* Recent Orders and Low Stock */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Orders */}
-        <div className="bg-white rounded-lg shadow-sm">
+        <div className="bg-white border border-gray-200 rounded-md">
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-gray-900">Recent Orders</h2>
-              <Link 
+              <Link
                 to="/orders"
-                className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
               >
                 View all
               </Link>
@@ -160,16 +159,16 @@ const Dashboard = () => {
             {recentOrders.length > 0 ? (
               <div className="space-y-4">
                 {recentOrders.map((order) => (
-                  <div key={order.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div key={order.id} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-md">
                     <div>
                       <p className="font-medium text-gray-900">Order #{order.id}</p>
                       <p className="text-sm text-gray-500">Customer ID: {order.customer_id}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-medium text-gray-900">${order.total_amount.toFixed(2)}</p>
-                      <p className={`text-sm px-2 py-1 rounded-full ${
-                        order.status === 'completed' 
-                          ? 'bg-green-100 text-green-800' 
+                      <p className="font-medium text-gray-900">{formatCurrency(order.total_amount)}</p>
+                      <p className={`text-sm px-2 py-1 rounded-md ${
+                        order.status === 'completed'
+                          ? 'bg-green-100 text-green-800'
                           : order.status === 'pending'
                           ? 'bg-yellow-100 text-yellow-800'
                           : 'bg-blue-100 text-blue-800'
@@ -187,16 +186,16 @@ const Dashboard = () => {
         </div>
 
         {/* Low Stock Alert */}
-        <div className="bg-white rounded-lg shadow-sm">
+        <div className="bg-white border border-gray-200 rounded-md">
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-gray-900 flex items-center">
                 <FaExclamationTriangle className="text-red-500 mr-2" />
                 Low Stock Alert
               </h2>
-              <Link 
+              <Link
                 to="/inventory"
-                className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
               >
                 View all
               </Link>
@@ -206,7 +205,7 @@ const Dashboard = () => {
             {lowStockMedicines.length > 0 ? (
               <div className="space-y-4">
                 {lowStockMedicines.map((stock) => (
-                  <div key={stock.id} className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                  <div key={stock.id} className="flex items-center justify-between p-3 bg-red-50 border border-red-100 rounded-md">
                     <div>
                       <p className="font-medium text-gray-900">Medicine ID: {stock.medicine_id}</p>
                       <p className="text-sm text-gray-500">
@@ -230,33 +229,33 @@ const Dashboard = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
+      <div className="bg-white border border-gray-200 rounded-md p-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Link
             to="/medicines"
-            className="flex items-center justify-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+            className="flex items-center justify-center p-4 bg-blue-50 border border-blue-100 rounded-md hover:bg-blue-100 transition-colors"
           >
             <FaPills className="text-blue-600 mr-2" />
             <span className="text-blue-800 font-medium">Add Medicine</span>
           </Link>
           <Link
             to="/customers"
-            className="flex items-center justify-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
+            className="flex items-center justify-center p-4 bg-green-50 border border-green-100 rounded-md hover:bg-green-100 transition-colors"
           >
             <FaUsers className="text-green-600 mr-2" />
             <span className="text-green-800 font-medium">Add Customer</span>
           </Link>
           <Link
             to="/orders"
-            className="flex items-center justify-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors"
+            className="flex items-center justify-center p-4 bg-purple-50 border border-purple-100 rounded-md hover:bg-purple-100 transition-colors"
           >
             <FaShoppingCart className="text-purple-600 mr-2" />
             <span className="text-purple-800 font-medium">Create Order</span>
           </Link>
           <Link
             to="/inventory"
-            className="flex items-center justify-center p-4 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition-colors"
+            className="flex items-center justify-center p-4 bg-yellow-50 border border-yellow-100 rounded-md hover:bg-yellow-100 transition-colors"
           >
             <FaWarehouse className="text-yellow-600 mr-2" />
             <span className="text-yellow-800 font-medium">Manage Stock</span>
