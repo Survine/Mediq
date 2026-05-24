@@ -91,6 +91,13 @@ def delete_customer(db: Session, customer_id: int) -> Customer:
             detail="Customer not found",
         )
 
+    # Prevent deleting customers that have orders (avoids orphaned orders/invoices)
+    if getattr(db_customer, "orders", None) and len(db_customer.orders) > 0:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot delete customer with existing orders",
+        )
+
     db.delete(db_customer)
     db.commit()
     return {"detail": "Customer deleted successfully"}

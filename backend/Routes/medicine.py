@@ -15,7 +15,7 @@ from Views.medicine import (
 router = APIRouter()
 
 #Gives all medicines
-@router.get("/", response_model=list[MedicineOut])
+@router.get("", response_model=list[MedicineOut])
 def get_all_medicines(db: Session = Depends(get_db)):
     return fetch_all_medicines(db)
 
@@ -36,7 +36,7 @@ def get_medicine_by_name(medicine_name: str, db: Session = Depends(get_db)):
     return med
 
 #Creates a new medicine
-@router.post("/", response_model=MedicineOut)
+@router.post("", response_model=MedicineOut)
 def create_medicine(medicine: MedicineCreate, db: Session = Depends(get_db)):
     return create_new_medicine(db, medicine)
 

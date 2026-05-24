@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import Layout from "../resuables/Layout";
 import Header from "../resuables/Header";
 import Toolbar from "../resuables/Toolbar";
 import Table from "../resuables/Table";
@@ -22,29 +21,51 @@ const Users = () => {
     { 
       key: "id", 
       title: "ID",
-      render: (user) => <span className="font-medium">{user.id}</span>
+      render: (value) => <span className="font-medium">{value}</span>
     },
     { 
       key: "username", 
       title: "Username",
-      render: (user) => <span className="font-medium">{user.username}</span>
+      render: (value) => <span className="font-medium">{value}</span>
     },
     { 
       key: "email", 
       title: "Email",
-      render: (user) => <span className="text-gray-600">{user.email}</span>
+      render: (value) => <span className="text-gray-600">{value}</span>
     },
     { 
       key: "is_admin", 
       title: "Admin",
-      render: (user) => (
+      render: (value) => (
         <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-          user.is_admin
+          value
             ? "bg-green-100 text-green-800"
             : "bg-gray-100 text-gray-800"
         }`}>
-          {user.is_admin ? "Yes" : "No"}
+          {value ? "Yes" : "No"}
         </span>
+      )
+    },
+    {
+      key: "actions",
+      title: "Actions",
+      render: (_, user) => (
+        <div className="flex space-x-2">
+          <button
+            onClick={() => handleEditClick(user)}
+            className="text-blue-600 hover:text-blue-800 p-1"
+            title="Edit"
+          >
+            ✏️
+          </button>
+          <button
+            onClick={() => handleDelete(user.id)}
+            className="text-red-600 hover:text-red-800 p-1"
+            title="Delete"
+          >
+            🗑️
+          </button>
+        </div>
       )
     },
   ];
@@ -61,7 +82,7 @@ const Users = () => {
     deleteItem,
     setError: setApiError,
     clearMessages,
-  } = useAdminCRUD("https://mediq-a6x0.onrender.com/users");
+  } = useAdminCRUD("/api/users");
 
   const {
     searchTerm,
@@ -139,7 +160,7 @@ const Users = () => {
   const error = apiError || searchError;
 
   return (
-    <Layout>
+    <>
       <Header title="👥 Users Dashboard" description="Manage your application users" />
       
       <Toolbar
@@ -179,7 +200,7 @@ const Users = () => {
         isLoading={isLoading}
         error={error}
       />
-    </Layout>
+    </>
   );
 };
 

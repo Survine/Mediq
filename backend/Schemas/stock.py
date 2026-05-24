@@ -23,7 +23,7 @@ class StockInDBBase(StockBase):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class StockOut(StockInDBBase):
     pass

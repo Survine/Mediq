@@ -90,18 +90,76 @@ def create_order(db: Session, order_in: OrderCreate) -> Order:
     return db_order
 
 def update_order(db: Session, order_id: int, order_in: OrderUpdate) -> Order:
-    db_order = fetch_order_by_id(db, order_id=order_id)
+    db_order = fetch_order_with_details(db, order_id=order_id)
     if not db_order:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Order not found",
         )
-    
+
     update_data = order_in.model_dump(exclude_unset=True)
-    
+    new_items = update_data.pop("order_medicines", None)
+
+    if new_items is not None:
+        # Don't allow mutating items if invoice exists
+        if getattr(db_order, "invoice", None) is not None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Cannot modify order items after an invoice is generated",
+            )
+
+        # Return existing quantities to stock
+        existing_items = db.query(OrderMedicine).filter(OrderMedicine.order_id == order_id).all()
+        for existing in existing_items:
+            stock = db.query(Stock).filter(Stock.medicine_id == existing.medicine_id).first()
+            if stock:
+                stock.quantity += existing.quantity
+                db.add(stock)
+
+        # Remove existing items
+        db.query(OrderMedicine).filter(OrderMedicine.order_id == order_id).delete(synchronize_session=False)
+
+        total_amount = 0.0
+        for item in new_items:
+            medicine_id = item["medicine_id"]
+            quantity = item["quantity"]
+            unit_price = item.get("unit_price")
+
+            medicine = db.query(Medicine).filter(Medicine.id == medicine_id).first()
+            if not medicine:
+                db.rollback()
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"Medicine with ID {medicine_id} not found",
+                )
+
+            stock = db.query(Stock).filter(Stock.medicine_id == medicine_id).first()
+            if not stock or stock.quantity < quantity:
+                db.rollback()
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Not enough stock for medicine {medicine.name}",
+                )
+
+            stock.quantity -= quantity
+            db.add(stock)
+
+            final_unit_price = unit_price if unit_price else medicine.price
+            db.add(
+                OrderMedicine(
+                    order_id=db_order.id,
+                    medicine_id=medicine_id,
+                    quantity=quantity,
+                    unit_price=final_unit_price,
+                )
+            )
+            total_amount += final_unit_price * quantity
+
+        db_order.total_amount = total_amount
+
     for field, value in update_data.items():
         setattr(db_order, field, value)
-    
+
     db.add(db_order)
     db.commit()
     db.refresh(db_order)

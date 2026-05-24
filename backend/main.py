@@ -1,10 +1,15 @@
 import os
 
 from fastapi import FastAPI
+from dotenv import load_dotenv
 from databases.database import Base, engine
 from Routes import medicine,order,customer,stock,user,invoice
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
+
+
+# Load environment variables from .env if present (safe no-op in production)
+load_dotenv()
 
 
 def _cors_origins() -> list[str]:

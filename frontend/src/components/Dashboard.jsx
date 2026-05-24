@@ -10,6 +10,7 @@ import {
   FaArrowDown,
   FaExclamationTriangle
 } from 'react-icons/fa';
+import ApiService from '../services/ApiService';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -30,17 +31,12 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       // Fetch statistics
-      const [medicinesRes, customersRes, ordersRes, stockRes] = await Promise.all([
-        fetch('http://localhost:8000/medicines'),
-        fetch('http://localhost:8000/customers'),
-        fetch('http://localhost:8000/orders'),
-        fetch('http://localhost:8000/stocks')
+      const [medicines, customers, orders, stocks] = await Promise.all([
+        ApiService.getMedicines(),
+        ApiService.getCustomers(),
+        ApiService.getOrders(),
+        ApiService.getStocks()
       ]);
-
-      const medicines = await medicinesRes.json();
-      const customers = await customersRes.json();
-      const orders = await ordersRes.json();
-      const stocks = await stockRes.json();
 
       // Calculate total revenue from orders
       const totalRevenue = orders.reduce((sum, order) => sum + order.total_amount, 0);

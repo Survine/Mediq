@@ -17,7 +17,7 @@ from Views.stock import (
 router = APIRouter()
 
 #Gives all stocks
-@router.get("/", response_model=list[StockOut])
+@router.get("", response_model=list[StockOut])
 def get_all_stocks(db: Session = Depends(get_db)):
     return fetch_all_stocks(db)
 
@@ -46,7 +46,7 @@ def get_stock_by_medicine_name(medicine_name: str, db: Session = Depends(get_db)
     return stock
 
 #Creates a new stock
-@router.post("/", response_model=StockOut)
+@router.post("", response_model=StockOut)
 def create_new_stock(stock: StockCreate, db: Session = Depends(get_db), admin_id: int = 1):
     return create_stock(db, stock, admin_id)
 
@@ -56,7 +56,7 @@ def update_existing_stock(stock_id: int, stock: StockUpdate, db: Session = Depen
     return update_stock(db, stock_id, stock, admin_id)
 
 #Deletes a stock
-@router.delete("/{stock_id}", response_model=StockOut)
+@router.delete("/{stock_id}")
 def delete_existing_stock(stock_id: int, db: Session = Depends(get_db)):
     stock = delete_stock(db, stock_id)
     if not stock:

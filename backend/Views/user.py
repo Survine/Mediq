@@ -5,6 +5,12 @@ from sqlalchemy.orm import Session
 from Models.user import User
 from Schemas.user import UserCreate, UserUpdate
 
+import hashlib
+
+
+def _hash_password(password: str) -> str:
+    return hashlib.sha256(password.encode()).hexdigest()
+
 
 def fetch_user_by_id(db: Session, user_id: int) -> Optional[User]:
     return db.query(User).filter(User.id == user_id).first()
@@ -39,7 +45,7 @@ def create_user(db: Session, user_in: UserCreate) -> User:
     db_user = User(
         username=user_in.username,
         email=user_in.email,
-        hashed_password=user_in.password,  
+        hashed_password=_hash_password(user_in.password),
         is_admin=user_in.is_admin,
     )
     db.add(db_user)
@@ -56,7 +62,11 @@ def update_user(db: Session, user_id: int, user_in: UserUpdate) -> User:
         )
     
     update_data = user_in.model_dump(exclude_unset=True)
-    
+
+    # Map incoming password -> hashed_password (User model has no 'password' column)
+    if "password" in update_data:
+        db_user.hashed_password = _hash_password(update_data.pop("password"))
+
     for field, value in update_data.items():
         setattr(db_user, field, value)
     
@@ -73,6 +83,18 @@ def delete_user(db: Session, user_id: int) -> User:
             detail="User not found",
         )
     
+    # Prevent deleting users referenced by invoices/stocks
+    if getattr(db_user, "invoices", None) and len(db_user.invoices) > 0:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot delete user with existing invoices",
+        )
+    if getattr(db_user, "stocks", None) and len(db_user.stocks) > 0:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot delete user with existing stock updates",
+        )
+
     db.delete(db_user)
     db.commit()
     return {"detail": "User deleted successfully"}

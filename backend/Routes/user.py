@@ -16,7 +16,7 @@ from Views.user import (
 
 router = APIRouter()
 
-@router.get("/", response_model=list[UserOut])
+@router.get("", response_model=list[UserOut])
 def get_all_users(db: Session = Depends(get_db)):
     return fetch_all_users(db)
 
@@ -41,7 +41,7 @@ def get_user_by_username(username: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
-@router.post("/", response_model=UserOut)
+@router.post("", response_model=UserOut)
 def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
     return create_user(db, user)
 
@@ -49,7 +49,7 @@ def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
 def update_existing_user(user_id: int, user: UserUpdate, db: Session = Depends(get_db)):
     return update_user(db, user_id, user)
 
-@router.delete("/{user_id}", response_model=UserOut)
+@router.delete("/{user_id}")
 def delete_existing_user(user_id: int, db: Session = Depends(get_db)):
     user = delete_user(db, user_id)
     if not user:

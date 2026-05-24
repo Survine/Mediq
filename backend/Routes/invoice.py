@@ -21,7 +21,7 @@ from Views.invoice import (
 
 router = APIRouter()
 
-@router.get("/", response_model=List[InvoiceOut])
+@router.get("", response_model=List[InvoiceOut])
 def get_all_invoices(db: Session = Depends(get_db)) -> List[InvoiceOut]:
     """Get all invoices"""
     return fetch_all_invoices(db)
@@ -77,7 +77,7 @@ def get_invoice_html(invoice_id: int, db: Session = Depends(get_db)) -> str:
     html_content = generate_invoice_html(invoice_details)
     return html_content
 
-@router.post("/", response_model=InvoiceOut)
+@router.post("", response_model=InvoiceOut)
 def create_new_invoice(invoice: InvoiceCreate, db: Session = Depends(get_db), user_id: int = 1) -> InvoiceOut:
     """Create a new invoice"""
     return create_invoice(db, invoice, user_id)

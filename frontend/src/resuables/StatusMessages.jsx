@@ -10,17 +10,40 @@ const StatusMessages = ({
   message,
   onClose
 }) => {
-  const [error, setError] = useState(initialError);
-  const [success, setSuccess] = useState(initialSuccess);
+  const [error, setError] = useState(initialError ?? null);
+  const [success, setSuccess] = useState(initialSuccess ?? null);
+  const hasNewMessage = Boolean(message && message.text);
 
-  // Handle new pattern
-  if (message && message.text) {
+  // Sync with parent component's state
+  useEffect(() => {
+    // If the new 'message' prop pattern is used, ignore old error/success state.
+    if (hasNewMessage) {
+      setError(null);
+      setSuccess(null);
+      return;
+    }
+
+    setError(initialError ?? null);
+    setSuccess(initialSuccess ?? null);
+  }, [hasNewMessage, initialError, initialSuccess]);
+
+  // Auto-dismiss after 3 seconds
+  useEffect(() => {
+    if (hasNewMessage) return;
+    if (error || success) {
+      const timer = setTimeout(() => {
+        setError(null);
+        setSuccess(null);
+        if (onDismiss) onDismiss();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [hasNewMessage, error, success, onDismiss]);
+
+  // Render new message pattern (after hooks to avoid hook-order issues)
+  if (hasNewMessage) {
     const isError = message.type === 'error';
     const isSuccess = message.type === 'success';
-
-    const handleClose = () => {
-      if (onClose) onClose();
-    };
 
     return (
       <div className={`p-4 rounded-lg border-l-4 flex items-center justify-between ${
@@ -36,7 +59,7 @@ const StatusMessages = ({
           <span>{message.text}</span>
         </div>
         <button 
-          onClick={handleClose}
+          onClick={() => onClose?.()}
           className={`${
             isError ? 'text-red-700 hover:text-red-900' : 
             isSuccess ? 'text-green-700 hover:text-green-900' :
@@ -48,24 +71,6 @@ const StatusMessages = ({
       </div>
     );
   }
-
-  // Sync with parent component's state
-  useEffect(() => {
-    setError(initialError);
-    setSuccess(initialSuccess);
-  }, [initialError, initialSuccess]);
-
-  // Auto-dismiss after 3 seconds
-  useEffect(() => {
-    if (error || success) {
-      const timer = setTimeout(() => {
-        setError(null);
-        setSuccess(null);
-        if (onDismiss) onDismiss();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [error, success, onDismiss]);
 
   if (isLoading) {
     return (

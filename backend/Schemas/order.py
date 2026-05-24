@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional, Any, List
 from datetime import datetime
+from Models.order import OrderStatus
 
 class OrderMedicineBase(BaseModel):
     medicine_id: int
@@ -31,7 +32,9 @@ class OrderCreate(OrderBase):
     order_medicines: List[OrderMedicineCreate]
 
 class OrderUpdate(OrderBase):
-    pass
+    customer_id: Optional[int] = None
+    status: Optional[OrderStatus] = None
+    order_medicines: Optional[List[OrderMedicineCreate]] = None
 
 class OrderInDBBase(OrderBase):
     id: int
